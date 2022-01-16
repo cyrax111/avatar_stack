@@ -1,7 +1,7 @@
 name: avatar_stack
 description: Simple widget stack
 version: 0.2.1
-homepage:
+repository: https://github.com/cyrax111/avatar_stack
 
 environment:
   sdk: ">=2.15.1 <3.0.0"
