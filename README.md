@@ -50,4 +50,4 @@ class AvatarStackExample extends StatelessWidget {
 }
 ```
 
-You also can use the example from github [https://github.com/cyrax111/avatar_stack/tree/master/example](https://github.com/cyrax111/avatar_stack/tree/master/example)
+You can also use the example from github [https://github.com/cyrax111/avatar_stack/tree/master/example](https://github.com/cyrax111/avatar_stack/tree/master/example)
