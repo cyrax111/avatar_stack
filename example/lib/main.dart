@@ -1,4 +1,3 @@
-// import 'package:avatar_stack/avatar_stack.dart';
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:flutter/material.dart';
 
@@ -6,14 +5,8 @@ void main() {
   runApp(const MaterialApp(home: AvatarStackExample()));
 }
 
-class AvatarStackExample extends StatefulWidget {
+class AvatarStackExample extends StatelessWidget {
   const AvatarStackExample({Key? key}) : super(key: key);
-
-  @override
-  State<AvatarStackExample> createState() => _AvatarStackExampleState();
-}
-
-class _AvatarStackExampleState extends State<AvatarStackExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,12 +18,13 @@ class _AvatarStackExampleState extends State<AvatarStackExample> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               const Text(
-                'Examples:',
+                'Example:',
               ),
+              const SizedBox(height: 20),
               AvatarStack(
                 height: 50,
                 avatars: [
-                  for (var n = 0; n < 30; n++)
+                  for (var n = 0; n < 15; n++)
                     NetworkImage('https://i.pravatar.cc/150?img=$n'),
                 ],
               ),
