@@ -12,7 +12,7 @@ class RestrictedPositionsWithInfoItem implements Positions {
   final double? maxCoverage;
   late double _width;
   late double _height;
-  late int _amountItems;
+  late int _fullAmountItems;
 
   @override
   void setSize({required double width, required double height}) {
@@ -21,17 +21,22 @@ class RestrictedPositionsWithInfoItem implements Positions {
   }
 
   @override
-  void setAmountItems(int amountItems) {
-    _amountItems = amountItems;
+  void setAmountItems(int fullAmountItems) {
+    _fullAmountItems = fullAmountItems;
   }
 
   @override
   List<ItemPosition> calculate() {
-    final allowedAmountItems = _calculateCapacityItems();
-    final minAmountItems = min(_amountItems, allowedAmountItems);
-    final spaceBetweenItems = _calculateSpaceBetweenItems(minAmountItems);
+    final allowedBySpaceAmountItems = _calculateCapacityItems();
+    final allowedAmountItems =
+        _getAmountItems(calculatedAmountItems: allowedBySpaceAmountItems);
+    final spaceBetweenItems = _calculateSpaceBetweenItems(allowedAmountItems);
     final offsetStep = _calculateOffsetStep(spaceBetweenItems);
     return _generatePositions(offsetStep, allowedAmountItems);
+  }
+
+  int _getAmountItems({required int calculatedAmountItems}) {
+    return min(_fullAmountItems, calculatedAmountItems);
   }
 
   int _calculateCapacityItems() {
@@ -64,12 +69,11 @@ class RestrictedPositionsWithInfoItem implements Positions {
   List<ItemPosition> _generatePositions(
       double offsetStep, int allowedAmountItems) {
     final positions = <ItemPosition>[];
-    final amount = min(_amountItems, allowedAmountItems);
     int n;
-    for (n = 0; n < amount - 1; n++) {
+    for (n = 0; n < allowedAmountItems - 1; n++) {
       positions.add(ItemPosition(number: n, position: n * offsetStep));
     }
-    final amountAdditionalItems = _amountItems - allowedAmountItems;
+    final amountAdditionalItems = _fullAmountItems - allowedAmountItems;
     final isAmountAdditionalItems = amountAdditionalItems > 0;
     if (isAmountAdditionalItems) {
       positions.add(ItemPosition(
@@ -88,4 +92,22 @@ class RestrictedPositionsWithInfoItem implements Positions {
   }
 
   double get _itemSize => _height;
+}
+
+class RestrictedAmountPositionsWithInfoItem
+    extends RestrictedPositionsWithInfoItem {
+  RestrictedAmountPositionsWithInfoItem({
+    double? maxCoverage = 0.8,
+    double? minCoverage,
+    this.maxAmountItems = 5,
+  }) : super(maxCoverage: maxCoverage, minCoverage: minCoverage);
+
+  final int maxAmountItems;
+
+  @override
+  int _getAmountItems({required int calculatedAmountItems}) {
+    final minBetweenFullAndCalculatedAmount =
+        min(_fullAmountItems, calculatedAmountItems);
+    return min(maxAmountItems, minBetweenFullAndCalculatedAmount);
+  }
 }
