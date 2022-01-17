@@ -10,28 +10,72 @@ class AvatarStackExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: const Text('Example')),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'Example:',
-              ),
-              const SizedBox(height: 20),
-              AvatarStack(
-                height: 50,
-                avatars: [
-                  for (var n = 0; n < 15; n++)
-                    NetworkImage('https://i.pravatar.cc/150?img=$n'),
-                ],
-              ),
+            children: const <Widget>[
+              Example1(),
+              SizedBox(height: 50),
+              Example2MaxAmount(),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class Example1 extends StatelessWidget {
+  const Example1({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Text(
+          'Default:',
+        ),
+        const SizedBox(height: 10),
+        AvatarStack(
+          height: 50,
+          avatars: [
+            for (var n = 0; n < 15; n++)
+              NetworkImage('https://i.pravatar.cc/150?img=$n')
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class Example2MaxAmount extends StatelessWidget {
+  const Example2MaxAmount({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = RestrictedAmountPositionsWithInfoItem(
+      maxAmountItems: 5,
+      maxCoverage: 0.3,
+      minCoverage: 0.1,
+    );
+    return Column(
+      children: [
+        const Text(
+          'RestrictedAmountPositionsWithInfoItem:',
+        ),
+        const SizedBox(height: 10),
+        AvatarStack(
+          settings: settings,
+          height: 50,
+          avatars: [
+            for (var n = 0; n < 15; n++)
+              NetworkImage('https://i.pravatar.cc/150?img=$n')
+          ],
+        ),
+      ],
     );
   }
 }
