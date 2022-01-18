@@ -17,3 +17,15 @@ class ItemPosition {
   final bool isInformationalItem;
   final int amountAdditionalItems;
 }
+
+/// Whether and how to align avatars horizontally.
+enum StackAlign {
+  /// Align the avatar stack on the left edge of the container.
+  left,
+
+  /// Align the avatar stack on the right edge of the container.
+  right,
+
+  /// Align the avatar stack in the center of the container.
+  center,
+}
