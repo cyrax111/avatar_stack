@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'widget_stack.dart';
 
 import 'positions/positions.dart';
-import 'positions/restricted_positions_with_info_item.dart';
+import 'positions/restricted_positions.dart';
 
 class AvatarStack extends StatelessWidget {
   const AvatarStack({
@@ -27,8 +27,8 @@ class AvatarStack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _settings = settings ??
-        RestrictedPositionsWithInfoItem(maxCoverage: 0.3, minCoverage: 0.1);
+    final _settings =
+        settings ?? RestrictedPositions(maxCoverage: 0.3, minCoverage: 0.1);
 
     final border = BorderSide(
         color: borderColor ?? Theme.of(context).colorScheme.onPrimary,

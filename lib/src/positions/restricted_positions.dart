@@ -1,55 +1,20 @@
+import 'dart:math';
+
 import 'positions.dart';
 
 class RestrictedPositions implements Positions {
   RestrictedPositions({
     this.maxCoverage = 0.8,
-    this.minCoverage,
+    this.minCoverage = double.negativeInfinity,
+    this.align = StackAlign.left,
   });
 
+  final double minCoverage;
+  final double maxCoverage;
+  final StackAlign align;
   late double _width;
   late double _height;
-  final double? minCoverage;
-  final double? maxCoverage;
-  late final int amountElements;
-
-  @override
-  List<ItemPosition> calculate() {
-    final spaceBetweenItems = _calculateSpaceBetweenItems();
-    final offsetStep = _calculateOffsetStep(spaceBetweenItems);
-    return _generatePositions(offsetStep);
-  }
-
-  double _calculateSpaceBetweenItems() {
-    if (amountElements < 2) {
-      return 0;
-    }
-    return (_width - _itemSize * amountElements) / (amountElements - 1);
-  }
-
-  double _calculateOffsetStep(double spaceBetweenItems) {
-    final calculatedCoveragePercent = -spaceBetweenItems / _itemSize;
-
-    final isMaxCoverageSet = maxCoverage != null;
-    if (isMaxCoverageSet && calculatedCoveragePercent > maxCoverage!) {
-      return _itemSize * (1 - maxCoverage!);
-    }
-
-    final isMinCoverageSet = minCoverage != null;
-    if (isMinCoverageSet && calculatedCoveragePercent < minCoverage!) {
-      return _itemSize * (1 - minCoverage!);
-    }
-    return _itemSize + spaceBetweenItems;
-  }
-
-  List<ItemPosition> _generatePositions(double offsetStep) {
-    final positions = <ItemPosition>[];
-    for (var n = 0; n < amountElements; n++) {
-      positions.add(ItemPosition(number: n, position: n * offsetStep));
-    }
-    return positions;
-  }
-
-  double get _itemSize => _height;
+  late int _fullAmountItems;
 
   @override
   void setSize({required double width, required double height}) {
@@ -58,7 +23,130 @@ class RestrictedPositions implements Positions {
   }
 
   @override
-  void setAmountItems(int amountItems) {
-    amountElements = amountItems;
+  void setAmountItems(int fullAmountItems) {
+    _fullAmountItems = fullAmountItems;
+  }
+
+  @override
+  List<ItemPosition> calculate() {
+    final allowedBySpaceAndMaxCoverageAmountItems =
+        _calculateMaxCapacityItems();
+    final allowedAmountItems = _getAmountItems(
+        calculatedAmountItems: allowedBySpaceAndMaxCoverageAmountItems);
+    final spaceBetweenItems = _calculateSpaceBetweenItems(allowedAmountItems);
+    final offsetStep = _calculateOffsetStep(spaceBetweenItems);
+    final alignmentOffset = _getAlignmentOffset(
+      amountItems: allowedAmountItems,
+      offsetStep: offsetStep,
+      spaceBetweenItems: spaceBetweenItems,
+    );
+    return _generatePositions(
+      offsetStep: offsetStep,
+      allowedAmountItems: allowedAmountItems,
+      alignmentOffset: alignmentOffset,
+    );
+  }
+
+  int _calculateMaxCapacityItems() {
+    final capacity =
+        _width / (_itemSize + _getSpaceBetweenItemsBy(coverage: maxCoverage));
+    return capacity.toInt();
+  }
+
+  int _getAmountItems({required int calculatedAmountItems}) {
+    return min(_fullAmountItems, calculatedAmountItems);
+  }
+
+  double _calculateSpaceBetweenItems(int amountItems) {
+    if (amountItems <= 1) {
+      return 0;
+    }
+
+    final spaceBetweenItemsForFullWidth =
+        (_width - _itemSize * amountItems) / (amountItems - 1);
+    final spaceBetweenItemsWithMinCoverageRestriction =
+        _getSpaceBetweenItemsBy(coverage: minCoverage);
+    return min(spaceBetweenItemsForFullWidth,
+        spaceBetweenItemsWithMinCoverageRestriction);
+  }
+
+  double _getSpaceBetweenItemsBy({required double coverage}) {
+    return _itemSize * (-1 * coverage);
+  }
+
+  double _calculateOffsetStep(double spaceBetweenItems) {
+    return _itemSize + spaceBetweenItems;
+  }
+
+  double _getAlignmentOffset({
+    required double offsetStep,
+    required int amountItems,
+    required double spaceBetweenItems,
+  }) {
+    final freeSpace = _width - amountItems * offsetStep + spaceBetweenItems;
+    late double alignmentOffset;
+    switch (align) {
+      case StackAlign.left:
+        alignmentOffset = 0;
+        break;
+      case StackAlign.right:
+        alignmentOffset = freeSpace;
+        break;
+      case StackAlign.center:
+        alignmentOffset = freeSpace / 2;
+        break;
+      default:
+        alignmentOffset = 0;
+    }
+    return alignmentOffset;
+  }
+
+  List<ItemPosition> _generatePositions({
+    required double offsetStep,
+    required int allowedAmountItems,
+    required double alignmentOffset,
+  }) {
+    final positions = <ItemPosition>[];
+    int n;
+    for (n = 0; n < allowedAmountItems - 1; n++) {
+      positions.add(
+          ItemPosition(number: n, position: n * offsetStep + alignmentOffset));
+    }
+    final amountAdditionalItems = _fullAmountItems - allowedAmountItems;
+    final isAmountAdditionalItems = amountAdditionalItems > 0;
+    if (isAmountAdditionalItems) {
+      positions.add(ItemPosition(
+        number: n,
+        position: n * offsetStep + alignmentOffset,
+        isInformationalItem: true,
+        amountAdditionalItems: amountAdditionalItems + 1,
+      ));
+    } else {
+      positions.add(ItemPosition(
+        number: n,
+        position: n * offsetStep + alignmentOffset,
+      ));
+    }
+    return positions;
+  }
+
+  double get _itemSize => _height;
+}
+
+class RestrictedAmountPositions extends RestrictedPositions {
+  RestrictedAmountPositions({
+    double maxCoverage = 0.8,
+    double minCoverage = double.negativeInfinity,
+    this.maxAmountItems = 5,
+    StackAlign align = StackAlign.left,
+  }) : super(maxCoverage: maxCoverage, minCoverage: minCoverage, align: align);
+
+  final int maxAmountItems;
+
+  @override
+  int _getAmountItems({required int calculatedAmountItems}) {
+    final minBetweenFullAndCalculatedAmount =
+        min(_fullAmountItems, calculatedAmountItems);
+    return min(maxAmountItems, minBetweenFullAndCalculatedAmount);
   }
 }
