@@ -4,9 +4,36 @@ Avatar stack is used to visually represent users, places, and things in an app.
 
 ![Example](https://github.com/cyrax111/blob/raw/master/avatar_stack/feature1.gif?raw=true)
 
-## Installation
 
-First, add `avatar_stack` as a [dependency in your pubspec.yaml file](https://flutter.dev/using-packages/).
+## Features
+
+
+### Restrict amount of items
+Usually the stack avatar shows all items as possible but you can restrict it by, say, five items.
+![Restrict amount of items](https://github.com/cyrax111/blob/raw/master/avatar_stack/restricted_amount.gif?raw=true)
+
+
+### Alignment
+By default the stack avatar has left alignment one can change it.
+#### *center alignment*
+![center alignment](https://github.com/cyrax111/blob/raw/master/avatar_stack/center_alignment.gif?raw=true)
+#### *right alignment*
+![right alignment](https://github.com/cyrax111/blob/raw/master/avatar_stack/right_alignment.gif?raw=true)
+
+
+### Coverage
+You can set how avatars will coverage each others. 
+#### *max coverage is set to 70%*
+![max coverage is set to 70%](https://github.com/cyrax111/blob/raw/master/avatar_stack/max_coverage.gif?raw=true)
+#### *min coverage is set to minus 50%*
+The negative coverage will set space between items.
+![min coverage is set to minus 50%](https://github.com/cyrax111/blob/raw/master/avatar_stack/min_coverage.gif?raw=true)
+
+
+### Any widget for stack
+You can use any widget to stack not only avatars
+![Any widget for stack](https://github.com/cyrax111/blob/raw/master/avatar_stack/stack_widgets.gif?raw=true)
+
 
 ## Example
 
