@@ -2,6 +2,9 @@ import 'dart:math';
 
 import 'positions.dart';
 
+/// Defines coordinates of common items and an information item.
+/// The height of elements is defined by _height of the area.
+/// Has coverage and align settings.
 class RestrictedPositions implements Positions {
   RestrictedPositions({
     this.maxCoverage = 0.8,
@@ -9,9 +12,23 @@ class RestrictedPositions implements Positions {
     this.align = StackAlign.left,
   });
 
+  /// Define minimum items coverage.
+  /// If [minCoverage] is negative the gape between item exists.
+  /// It is measured as a percentage, for example:
+  /// minCoverage = 0.5 means 50% of coverage
+  /// minCoverage = 0.81 means 81% of coverage
   final double minCoverage;
+
+  /// Define maximum items coverage.
+  /// If [maxCoverage] is negative the gape between item exists.
+  /// It is measured as a percentage, for example:
+  /// minCoverage = 0.5 means 50% of coverage
+  /// minCoverage = 0.81 means 81% of coverage
   final double maxCoverage;
+
+  /// Alignment
   final StackAlign align;
+
   late double _width;
   late double _height;
   late int _fullAmountItems;
@@ -133,6 +150,9 @@ class RestrictedPositions implements Positions {
   double get _itemSize => _height;
 }
 
+/// Defines coordinates of common items and an information item
+/// as [RestrictedAmountPositions] and has [maxAmountItems] which
+/// means only maxAmountItems items will be shown maximum.
 class RestrictedAmountPositions extends RestrictedPositions {
   RestrictedAmountPositions({
     double maxCoverage = 0.8,
@@ -141,6 +161,7 @@ class RestrictedAmountPositions extends RestrictedPositions {
     StackAlign align = StackAlign.left,
   }) : super(maxCoverage: maxCoverage, minCoverage: minCoverage, align: align);
 
+  /// The maximum amount of items to show
   final int maxAmountItems;
 
   @override

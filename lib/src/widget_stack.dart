@@ -4,6 +4,7 @@ import 'positions/positions.dart';
 
 typedef InfoWidgetBuilder = Widget Function(int surplus);
 
+/// Draws widgets stack. Can use any widgets.
 class WidgetStack extends StatelessWidget {
   const WidgetStack({
     required this.positions,
@@ -12,10 +13,13 @@ class WidgetStack extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  /// List of any widgets to draw
   final List<Widget> stackedWidgets;
 
+  /// Algorithm of calculating positions
   final Positions positions;
 
+  /// Callback for drawing information of hidden widgets. Something like: (+5)
   final InfoWidgetBuilder buildInfoWidget;
 
   @override
