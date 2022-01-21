@@ -59,10 +59,7 @@ class Example1 extends StatelessWidget {
         const SizedBox(height: 10),
         AvatarStack(
           height: 50,
-          avatars: [
-            for (var n = 0; n < 15; n++)
-              NetworkImage('https://i.pravatar.cc/150?img=$n')
-          ],
+          avatars: [for (var n = 0; n < 15; n++) NetworkImage(getAvatarUrl(n))],
         ),
       ],
     );
@@ -88,10 +85,7 @@ class Example2MaxAmount extends StatelessWidget {
         AvatarStack(
           settings: settings,
           height: 50,
-          avatars: [
-            for (var n = 0; n < 15; n++)
-              NetworkImage('https://i.pravatar.cc/150?img=$n')
-          ],
+          avatars: [for (var n = 0; n < 15; n++) NetworkImage(getAvatarUrl(n))],
         ),
       ],
     );
@@ -118,10 +112,7 @@ class Example3MaxAmountCenterAlign extends StatelessWidget {
         AvatarStack(
           settings: settings,
           height: 50,
-          avatars: [
-            for (var n = 0; n < 15; n++)
-              NetworkImage('https://i.pravatar.cc/150?img=$n')
-          ],
+          avatars: [for (var n = 0; n < 15; n++) NetworkImage(getAvatarUrl(n))],
         ),
       ],
     );
@@ -147,10 +138,7 @@ class Example4RightAlign extends StatelessWidget {
         AvatarStack(
           height: 50,
           settings: settings,
-          avatars: [
-            for (var n = 0; n < 15; n++)
-              NetworkImage('https://i.pravatar.cc/150?img=$n')
-          ],
+          avatars: [for (var n = 0; n < 15; n++) NetworkImage(getAvatarUrl(n))],
         ),
       ],
     );
@@ -176,10 +164,7 @@ class Example5MaxCoverage extends StatelessWidget {
         AvatarStack(
           height: 50,
           settings: settings,
-          avatars: [
-            for (var n = 0; n < 40; n++)
-              NetworkImage('https://i.pravatar.cc/150?img=$n')
-          ],
+          avatars: [for (var n = 0; n < 40; n++) NetworkImage(getAvatarUrl(n))],
         ),
       ],
     );
@@ -204,10 +189,7 @@ class Example6MinCoverage extends StatelessWidget {
         AvatarStack(
           height: 50,
           settings: settings,
-          avatars: [
-            for (var n = 0; n < 5; n++)
-              NetworkImage('https://i.pravatar.cc/150?img=$n')
-          ],
+          avatars: [for (var n = 0; n < 5; n++) NetworkImage(getAvatarUrl(n))],
         ),
       ],
     );
@@ -266,4 +248,10 @@ class Example7WidgetStack extends StatelessWidget {
       ],
     );
   }
+}
+
+String getAvatarUrl(int n) {
+  // final url = 'https://i.pravatar.cc/150?img=$n';
+  final url = 'https://robohash.org/$n?bgset=bg1';
+  return url;
 }
