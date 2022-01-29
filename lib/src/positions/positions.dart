@@ -1,3 +1,4 @@
+/// Base interface for positions.
 abstract class Positions {
   /// Set size of area items are need to place in
   void setSize({required double width, required double height});
