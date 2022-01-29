@@ -20,6 +20,8 @@ class AvatarStackExample extends StatelessWidget {
             children: const <Widget>[
               Example1(),
               Indent(),
+              Example8InfoIndent(),
+              Indent(),
               Example2MaxAmount(),
               Indent(),
               Example3MaxAmountCenterAlign(),
@@ -246,6 +248,47 @@ class Example7WidgetStack extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class Example8InfoIndent extends StatelessWidget {
+  const Example8InfoIndent({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = RestrictedPositions(
+      maxCoverage: 0.3,
+      minCoverage: 0.1,
+      align: StackAlign.right,
+      infoIndent: 15,
+    );
+    return Column(
+      children: [
+        const Text(
+          'Indent of the info widget:',
+        ),
+        const SizedBox(height: 10),
+        AvatarStack(
+          height: 50,
+          settings: settings,
+          avatars: [for (var n = 0; n < 35; n++) NetworkImage(getAvatarUrl(n))],
+          infoWidgetBuilder: (surplus) => _infoWidget(surplus, context),
+        ),
+      ],
+    );
+  }
+
+  Widget _infoWidget(int surplus, BuildContext context) {
+    return FittedBox(
+      fit: BoxFit.contain,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          '+$surplus',
+          style: Theme.of(context).textTheme.headline6,
+        ),
+      ),
     );
   }
 }

@@ -10,6 +10,7 @@ class RestrictedPositions implements Positions {
     this.maxCoverage = 0.8,
     this.minCoverage = double.negativeInfinity,
     this.align = StackAlign.left,
+    this.infoIndent = 0.0,
   });
 
   /// Define minimum items coverage.
@@ -29,9 +30,15 @@ class RestrictedPositions implements Positions {
   /// Alignment
   final StackAlign align;
 
+  /// The additional space between an info item (if exists) and other items.
+  /// Info item usually has information about hidden items. Something like: (+5)
+  final double infoIndent;
+  double get _infoIndent => _isInfoItem ? infoIndent : 0;
+
   late double _width;
   late double _height;
   late int _fullAmountItems;
+  late int _allowedAmountItems;
 
   @override
   void setSize({required double width, required double height}) {
@@ -48,18 +55,16 @@ class RestrictedPositions implements Positions {
   List<ItemPosition> calculate() {
     final allowedBySpaceAndMaxCoverageAmountItems =
         _calculateMaxCapacityItems();
-    final allowedAmountItems = _getAmountItems(
+    _allowedAmountItems = _getAmountItems(
         calculatedAmountItems: allowedBySpaceAndMaxCoverageAmountItems);
-    final spaceBetweenItems = _calculateSpaceBetweenItems(allowedAmountItems);
+    final spaceBetweenItems = _calculateSpaceBetweenItems();
     final offsetStep = _calculateOffsetStep(spaceBetweenItems);
     final alignmentOffset = _getAlignmentOffset(
-      amountItems: allowedAmountItems,
       offsetStep: offsetStep,
       spaceBetweenItems: spaceBetweenItems,
     );
     return _generatePositions(
       offsetStep: offsetStep,
-      allowedAmountItems: allowedAmountItems,
       alignmentOffset: alignmentOffset,
     );
   }
@@ -74,13 +79,14 @@ class RestrictedPositions implements Positions {
     return min(_fullAmountItems, calculatedAmountItems);
   }
 
-  double _calculateSpaceBetweenItems(int amountItems) {
-    if (amountItems <= 1) {
+  double _calculateSpaceBetweenItems() {
+    if (_allowedAmountItems <= 1) {
       return 0;
     }
 
     final spaceBetweenItemsForFullWidth =
-        (_width - _itemSize * amountItems) / (amountItems - 1);
+        (_width - _infoIndent - _itemSize * _allowedAmountItems) /
+            (_allowedAmountItems - 1);
     final spaceBetweenItemsWithMinCoverageRestriction =
         _getSpaceBetweenItemsBy(coverage: minCoverage);
     return min(spaceBetweenItemsForFullWidth,
@@ -97,10 +103,12 @@ class RestrictedPositions implements Positions {
 
   double _getAlignmentOffset({
     required double offsetStep,
-    required int amountItems,
     required double spaceBetweenItems,
   }) {
-    final freeSpace = _width - amountItems * offsetStep + spaceBetweenItems;
+    final freeSpace = _width -
+        _allowedAmountItems * offsetStep +
+        spaceBetweenItems -
+        _infoIndent;
     late double alignmentOffset;
     switch (align) {
       case StackAlign.left:
@@ -118,25 +126,26 @@ class RestrictedPositions implements Positions {
     return alignmentOffset;
   }
 
+  int get _amountAdditionalItems => _fullAmountItems - _allowedAmountItems;
+
+  bool get _isInfoItem => _amountAdditionalItems > 0;
+
   List<ItemPosition> _generatePositions({
     required double offsetStep,
-    required int allowedAmountItems,
     required double alignmentOffset,
   }) {
     final positions = <ItemPosition>[];
     int n;
-    for (n = 0; n < allowedAmountItems - 1; n++) {
+    for (n = 0; n < _allowedAmountItems - 1; n++) {
       positions.add(
           ItemPosition(number: n, position: n * offsetStep + alignmentOffset));
     }
-    final amountAdditionalItems = _fullAmountItems - allowedAmountItems;
-    final isAmountAdditionalItems = amountAdditionalItems > 0;
-    if (isAmountAdditionalItems) {
+    if (_isInfoItem) {
       positions.add(ItemPosition(
         number: n,
-        position: n * offsetStep + alignmentOffset,
+        position: n * offsetStep + alignmentOffset + infoIndent,
         isInformationalItem: true,
-        amountAdditionalItems: amountAdditionalItems + 1,
+        amountAdditionalItems: _amountAdditionalItems + 1,
       ));
     } else {
       positions.add(ItemPosition(
@@ -159,7 +168,13 @@ class RestrictedAmountPositions extends RestrictedPositions {
     double minCoverage = double.negativeInfinity,
     this.maxAmountItems = 5,
     StackAlign align = StackAlign.left,
-  }) : super(maxCoverage: maxCoverage, minCoverage: minCoverage, align: align);
+    double infoIndent = 0.0,
+  }) : super(
+          maxCoverage: maxCoverage,
+          minCoverage: minCoverage,
+          align: align,
+          infoIndent: infoIndent,
+        );
 
   /// The maximum amount of items to show
   final int maxAmountItems;
