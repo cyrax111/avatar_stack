@@ -11,6 +11,7 @@ class RestrictedPositions implements Positions {
     this.minCoverage = double.negativeInfinity,
     this.align = StackAlign.left,
     this.infoIndent = 0.0,
+    this.laying = const StackLaying.last(),
   });
 
   /// Define minimum items coverage.
@@ -34,6 +35,8 @@ class RestrictedPositions implements Positions {
   /// Info item usually has information about hidden items. Something like: (+5)
   final double infoIndent;
   double get _infoIndent => _isInfoItem ? infoIndent : 0;
+
+  late StackLaying laying;
 
   late double _width;
   late double _height;
@@ -126,32 +129,44 @@ class RestrictedPositions implements Positions {
     return alignmentOffset;
   }
 
-  int get _amountAdditionalItems => _fullAmountItems - _allowedAmountItems;
+  int get _amountHiddenItems => _fullAmountItems - _allowedAmountItems;
 
-  bool get _isInfoItem => _amountAdditionalItems > 0;
+  bool get _isInfoItem => _amountHiddenItems > 0;
 
   List<ItemPosition> _generatePositions({
     required double offsetStep,
     required double alignmentOffset,
   }) {
     final positions = <ItemPosition>[];
-    int n;
-    for (n = 0; n < _allowedAmountItems - 1; n++) {
-      positions.add(
-          ItemPosition(number: n, position: n * offsetStep + alignmentOffset));
-    }
+
     if (_isInfoItem) {
+      final topPosition = min(_allowedAmountItems - 1, laying.topPosition);
+      for (var n = _allowedAmountItems - 1 - 1; n >= topPosition; n--) {
+        positions.add(ItemPosition(
+            number: n, position: n * offsetStep + alignmentOffset));
+      }
+      for (var n = 0; n < topPosition; n++) {
+        positions.add(ItemPosition(
+            number: n, position: n * offsetStep + alignmentOffset));
+      }
       positions.add(ItemPosition(
-        number: n,
-        position: n * offsetStep + alignmentOffset + infoIndent,
+        number: _allowedAmountItems - 1,
+        position: (_allowedAmountItems - 1) * offsetStep +
+            alignmentOffset +
+            infoIndent,
         isInformationalItem: true,
-        amountAdditionalItems: _amountAdditionalItems + 1,
+        amountAdditionalItems: _amountHiddenItems + 1,
       ));
     } else {
-      positions.add(ItemPosition(
-        number: n,
-        position: n * offsetStep + alignmentOffset,
-      ));
+      final topPosition = min(_allowedAmountItems, laying.topPosition);
+      for (var n = _allowedAmountItems - 1; n >= topPosition; n--) {
+        positions.add(ItemPosition(
+            number: n, position: n * offsetStep + alignmentOffset));
+      }
+      for (var n = 0; n < topPosition; n++) {
+        positions.add(ItemPosition(
+            number: n, position: n * offsetStep + alignmentOffset));
+      }
     }
     return positions;
   }

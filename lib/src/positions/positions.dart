@@ -1,3 +1,7 @@
+import '../constants/max_int.dart'
+    if (dart.library.io) '../constants/max_int_64.dart'
+    if (dart.library.html) '../constants/max_int_32.dart';
+
 /// Base interface for positions.
 abstract class Positions {
   /// Set size of area items are need to place in
@@ -43,4 +47,14 @@ enum StackAlign {
 
   /// Align the avatar stack in the center of the container.
   center,
+}
+
+class StackLaying {
+  const StackLaying({
+    required this.topPosition,
+  }) : assert(topPosition >= 0, 'topPosition must be positive');
+  const StackLaying.first() : topPosition = 0;
+  const StackLaying.last() : topPosition = maxInt;
+
+  final int topPosition;
 }

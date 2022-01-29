@@ -18,6 +18,10 @@ class AvatarStackExample extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const <Widget>[
+              Example9(),
+              Indent(),
+              Example10(),
+              Indent(),
               Example1(),
               Indent(),
               Example8InfoIndent(),
@@ -289,6 +293,58 @@ class Example8InfoIndent extends StatelessWidget {
           style: Theme.of(context).textTheme.headline6,
         ),
       ),
+    );
+  }
+}
+
+class Example9 extends StatelessWidget {
+  const Example9({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = RestrictedPositions(
+      maxCoverage: 0.3,
+      minCoverage: 0.1,
+      laying: const StackLaying.first(),
+    );
+    return Column(
+      children: [
+        const Text(
+          'Laying:',
+        ),
+        const SizedBox(height: 10),
+        AvatarStack(
+          height: 50,
+          settings: settings,
+          avatars: [for (var n = 0; n < 15; n++) NetworkImage(getAvatarUrl(n))],
+        ),
+      ],
+    );
+  }
+}
+
+class Example10 extends StatelessWidget {
+  const Example10({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = RestrictedPositions(
+      maxCoverage: 0.3,
+      minCoverage: 0.1,
+      laying: const StackLaying(topPosition: 5),
+    );
+    return Column(
+      children: [
+        const Text(
+          'Laying:',
+        ),
+        const SizedBox(height: 10),
+        AvatarStack(
+          height: 50,
+          settings: settings,
+          avatars: [for (var n = 0; n < 15; n++) NetworkImage(getAvatarUrl(n))],
+        ),
+      ],
     );
   }
 }
