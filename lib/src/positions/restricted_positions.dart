@@ -92,10 +92,6 @@ class RestrictedPositions implements Positions {
         spaceBetweenItemsWithMinCoverageRestriction);
   }
 
-  double _getSpaceBetweenItemsBy({required double coverage}) {
-    return _itemSize * (-1 * coverage);
-  }
-
   double _calculateOffsetStep() {
     return _itemSize + _spaceBetweenItems;
   }
@@ -121,10 +117,6 @@ class RestrictedPositions implements Positions {
     }
     return alignmentOffset;
   }
-
-  int get _amountHiddenItems => _fullAmountItems - _allowedAmountItems;
-
-  bool get _isInfoItem => _amountHiddenItems > 0;
 
   List<ItemPosition> _generatePositions() {
     final positions = <ItemPosition>[];
@@ -156,16 +148,6 @@ class RestrictedPositions implements Positions {
     }
   }
 
-  int get _itemToFill {
-    int itemToFill;
-    if (_isInfoItem) {
-      itemToFill = _allowedAmountItems - 1;
-    } else {
-      itemToFill = _allowedAmountItems;
-    }
-    return itemToFill;
-  }
-
   ItemPosition _generateItemPosition(int number) => ItemPosition(
         number: number,
         position: number * _offsetStep + _alignmentOffset,
@@ -177,8 +159,27 @@ class RestrictedPositions implements Positions {
             _alignmentOffset +
             _infoIndent,
         isInformationalItem: true,
-        amountAdditionalItems: _amountHiddenItems + 1, // TODO(any): rid from 1
+        amountAdditionalItems:
+            _amountHiddenItems + 1, // we also replace one item with infoItem
       );
+
+  bool get _isInfoItem => _amountHiddenItems > 0;
+
+  int get _amountHiddenItems => _fullAmountItems - _allowedAmountItems;
+
+  int get _itemToFill {
+    int itemToFill;
+    if (_isInfoItem) {
+      itemToFill = _allowedAmountItems - 1;
+    } else {
+      itemToFill = _allowedAmountItems;
+    }
+    return itemToFill;
+  }
+
+  double _getSpaceBetweenItemsBy({required double coverage}) {
+    return _itemSize * (-1 * coverage);
+  }
 
   double get _itemSize => _height;
 }
