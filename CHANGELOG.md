@@ -1,3 +1,11 @@
+## 0.5.0
+
+* Added positional parameter of the additional space between an info item and other items
+* Added the way to tile items
+* Added documentation
+* Added examples
+* Updated readme
+
 ## 0.4.0
 
 * Added documentation

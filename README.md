@@ -34,6 +34,18 @@ The negative coverage will set space between items.
 You can use any widget to stack not only avatars
 ![Any widget for stack](https://github.com/cyrax111/blob/raw/master/avatar_stack/stack_widgets.gif?raw=true)
 
+### Indent of an info item
+The additional space between an info item (if exists) and other items.
+![Indent of an info item](https://github.com/cyrax111/blob/raw/master/avatar_stack/indent_of_the_info_widget.png?raw=true)
+
+### Stack laying
+The way to tile items.
+
+#### *the first item is at the top*
+![Indent of an info item](https://github.com/cyrax111/blob/raw/master/avatar_stack/the_first_item_is_at_the_top.png?raw=true)
+
+#### *the fifth item is at the top*
+![Indent of an info item](https://github.com/cyrax111/blob/raw/master/avatar_stack/the_fifth_item_is_at_the_top.png?raw=true)
 
 ## Example
 
