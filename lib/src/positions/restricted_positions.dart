@@ -40,36 +40,32 @@ class RestrictedPositions implements Positions {
 
   late double _width;
   late double _height;
-  late int _fullAmountItems;
-  late int _allowedAmountItems;
-
   @override
   void setSize({required double width, required double height}) {
     _width = width;
     _height = height;
   }
 
+  late int _fullAmountItems;
   @override
   void setAmountItems(int fullAmountItems) {
     _fullAmountItems = fullAmountItems;
   }
 
+  late int _allowedAmountItems;
+  late int _allowedBySpaceAndMaxCoverageAmountItems;
+  late double _spaceBetweenItems;
+  late double _offsetStep;
+  late double _alignmentOffset;
+
   @override
   List<ItemPosition> calculate() {
-    final allowedBySpaceAndMaxCoverageAmountItems =
-        _calculateMaxCapacityItems();
-    _allowedAmountItems = _getAmountItems(
-        calculatedAmountItems: allowedBySpaceAndMaxCoverageAmountItems);
-    final spaceBetweenItems = _calculateSpaceBetweenItems();
-    final offsetStep = _calculateOffsetStep(spaceBetweenItems);
-    final alignmentOffset = _getAlignmentOffset(
-      offsetStep: offsetStep,
-      spaceBetweenItems: spaceBetweenItems,
-    );
-    return _generatePositions(
-      offsetStep: offsetStep,
-      alignmentOffset: alignmentOffset,
-    );
+    _allowedBySpaceAndMaxCoverageAmountItems = _calculateMaxCapacityItems();
+    _allowedAmountItems = _getAmountItems();
+    _spaceBetweenItems = _calculateSpaceBetweenItems();
+    _offsetStep = _calculateOffsetStep();
+    _alignmentOffset = _getAlignmentOffset();
+    return _generatePositions();
   }
 
   int _calculateMaxCapacityItems() {
@@ -78,8 +74,8 @@ class RestrictedPositions implements Positions {
     return capacity.toInt();
   }
 
-  int _getAmountItems({required int calculatedAmountItems}) {
-    return min(_fullAmountItems, calculatedAmountItems);
+  int _getAmountItems() {
+    return min(_fullAmountItems, _allowedBySpaceAndMaxCoverageAmountItems);
   }
 
   double _calculateSpaceBetweenItems() {
@@ -100,17 +96,14 @@ class RestrictedPositions implements Positions {
     return _itemSize * (-1 * coverage);
   }
 
-  double _calculateOffsetStep(double spaceBetweenItems) {
-    return _itemSize + spaceBetweenItems;
+  double _calculateOffsetStep() {
+    return _itemSize + _spaceBetweenItems;
   }
 
-  double _getAlignmentOffset({
-    required double offsetStep,
-    required double spaceBetweenItems,
-  }) {
+  double _getAlignmentOffset() {
     final freeSpace = _width -
-        _allowedAmountItems * offsetStep +
-        spaceBetweenItems -
+        _allowedAmountItems * _offsetStep +
+        _spaceBetweenItems -
         _infoIndent;
     late double alignmentOffset;
     switch (align) {
@@ -133,43 +126,59 @@ class RestrictedPositions implements Positions {
 
   bool get _isInfoItem => _amountHiddenItems > 0;
 
-  List<ItemPosition> _generatePositions({
-    required double offsetStep,
-    required double alignmentOffset,
-  }) {
+  List<ItemPosition> _generatePositions() {
     final positions = <ItemPosition>[];
 
-    if (_isInfoItem) {
-      final topPosition = min(_allowedAmountItems - 1, laying.topPosition);
-      for (var n = _allowedAmountItems - 1 - 1; n >= topPosition; n--) {
-        positions.add(ItemPosition(
-            number: n, position: n * offsetStep + alignmentOffset));
-      }
-      for (var n = 0; n < topPosition; n++) {
-        positions.add(ItemPosition(
-            number: n, position: n * offsetStep + alignmentOffset));
-      }
-      positions.add(ItemPosition(
-        number: _allowedAmountItems - 1,
-        position: (_allowedAmountItems - 1) * offsetStep +
-            alignmentOffset +
-            infoIndent,
-        isInformationalItem: true,
-        amountAdditionalItems: _amountHiddenItems + 1,
-      ));
-    } else {
-      final topPosition = min(_allowedAmountItems, laying.topPosition);
-      for (var n = _allowedAmountItems - 1; n >= topPosition; n--) {
-        positions.add(ItemPosition(
-            number: n, position: n * offsetStep + alignmentOffset));
-      }
-      for (var n = 0; n < topPosition; n++) {
-        positions.add(ItemPosition(
-            number: n, position: n * offsetStep + alignmentOffset));
-      }
-    }
+    _fillPositionsBackward(positions);
+    _fillPositionsForward(positions);
+    _addInfoItemPosition(positions);
+
     return positions;
   }
+
+  void _fillPositionsBackward(List<ItemPosition> positions) {
+    final normalizedTopPosition = min(_itemToFill, laying.topPosition);
+    for (var n = _itemToFill - 1; n >= normalizedTopPosition; n--) {
+      positions.add(_generateItemPosition(n));
+    }
+  }
+
+  void _fillPositionsForward(List<ItemPosition> positions) {
+    final normalizedTopPosition = min(_itemToFill, laying.topPosition);
+    for (var n = 0; n < normalizedTopPosition; n++) {
+      positions.add(_generateItemPosition(n));
+    }
+  }
+
+  void _addInfoItemPosition(List<ItemPosition> positions) {
+    if (_isInfoItem) {
+      positions.add(_generateInfoItemPosition());
+    }
+  }
+
+  int get _itemToFill {
+    int itemToFill;
+    if (_isInfoItem) {
+      itemToFill = _allowedAmountItems - 1;
+    } else {
+      itemToFill = _allowedAmountItems;
+    }
+    return itemToFill;
+  }
+
+  ItemPosition _generateItemPosition(int number) => ItemPosition(
+        number: number,
+        position: number * _offsetStep + _alignmentOffset,
+      );
+
+  ItemPosition _generateInfoItemPosition() => ItemPosition(
+        number: _allowedAmountItems - 1,
+        position: (_allowedAmountItems - 1) * _offsetStep +
+            _alignmentOffset +
+            _infoIndent,
+        isInformationalItem: true,
+        amountAdditionalItems: _amountHiddenItems + 1, // TODO(any): rid from 1
+      );
 
   double get _itemSize => _height;
 }
@@ -195,9 +204,9 @@ class RestrictedAmountPositions extends RestrictedPositions {
   final int maxAmountItems;
 
   @override
-  int _getAmountItems({required int calculatedAmountItems}) {
+  int _getAmountItems() {
     final minBetweenFullAndCalculatedAmount =
-        min(_fullAmountItems, calculatedAmountItems);
+        min(_fullAmountItems, _allowedBySpaceAndMaxCoverageAmountItems);
     return min(maxAmountItems, minBetweenFullAndCalculatedAmount);
   }
 }
