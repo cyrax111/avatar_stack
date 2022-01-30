@@ -18,11 +18,11 @@ class AvatarStackExample extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const <Widget>[
-              Example9(),
+              Example1Default(),
               Indent(),
-              Example10(),
+              Example9StackLayingFirst(),
               Indent(),
-              Example1(),
+              Example10StackLayingFive(),
               Indent(),
               Example8InfoIndent(),
               Indent(),
@@ -52,8 +52,8 @@ class Indent extends StatelessWidget {
   Widget build(BuildContext context) => const SizedBox(height: 30);
 }
 
-class Example1 extends StatelessWidget {
-  const Example1({Key? key}) : super(key: key);
+class Example1Default extends StatelessWidget {
+  const Example1Default({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +104,7 @@ class Example3MaxAmountCenterAlign extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = RestrictedAmountPositions(
-      maxAmountItems: 5,
+      maxAmountItems: 4,
       maxCoverage: 0.3,
       minCoverage: 0.1,
       align: StackAlign.center,
@@ -297,8 +297,8 @@ class Example8InfoIndent extends StatelessWidget {
   }
 }
 
-class Example9 extends StatelessWidget {
-  const Example9({Key? key}) : super(key: key);
+class Example9StackLayingFirst extends StatelessWidget {
+  const Example9StackLayingFirst({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -310,21 +310,21 @@ class Example9 extends StatelessWidget {
     return Column(
       children: [
         const Text(
-          'Laying:',
+          'The first item is at the top:',
         ),
         const SizedBox(height: 10),
         AvatarStack(
           height: 50,
           settings: settings,
-          avatars: [for (var n = 0; n < 15; n++) NetworkImage(getAvatarUrl(n))],
+          avatars: [for (var n = 0; n < 17; n++) NetworkImage(getAvatarUrl(n))],
         ),
       ],
     );
   }
 }
 
-class Example10 extends StatelessWidget {
-  const Example10({Key? key}) : super(key: key);
+class Example10StackLayingFive extends StatelessWidget {
+  const Example10StackLayingFive({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -335,14 +335,12 @@ class Example10 extends StatelessWidget {
     );
     return Column(
       children: [
-        const Text(
-          'Laying:',
-        ),
+        const Text('The fifth item is at the top:'),
         const SizedBox(height: 10),
         AvatarStack(
           height: 50,
           settings: settings,
-          avatars: [for (var n = 0; n < 15; n++) NetworkImage(getAvatarUrl(n))],
+          avatars: [for (var n = 0; n < 20; n++) NetworkImage(getAvatarUrl(n))],
         ),
       ],
     );
