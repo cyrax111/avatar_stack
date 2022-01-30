@@ -11,7 +11,7 @@ class RestrictedPositions implements Positions {
     this.minCoverage = double.negativeInfinity,
     this.align = StackAlign.left,
     this.infoIndent = 0.0,
-    this.laying = const StackLaying.last(),
+    this.laying = StackLaying.last,
   });
 
   /// Define minimum items coverage.
@@ -129,14 +129,16 @@ class RestrictedPositions implements Positions {
   }
 
   void _fillPositionsBackward(List<ItemPosition> positions) {
-    final normalizedTopPosition = min(_itemToFill, laying.topPosition);
+    final normalizedTopPosition =
+        min(_itemToFill, laying.itemPositionNumberAtTop);
     for (var n = _itemToFill - 1; n >= normalizedTopPosition; n--) {
       positions.add(_generateItemPosition(n));
     }
   }
 
   void _fillPositionsForward(List<ItemPosition> positions) {
-    final normalizedTopPosition = min(_itemToFill, laying.topPosition);
+    final normalizedTopPosition =
+        min(_itemToFill, laying.itemPositionNumberAtTop);
     for (var n = 0; n < normalizedTopPosition; n++) {
       positions.add(_generateItemPosition(n));
     }
@@ -144,7 +146,11 @@ class RestrictedPositions implements Positions {
 
   void _addInfoItemPosition(List<ItemPosition> positions) {
     if (_isInfoItem) {
-      positions.add(_generateInfoItemPosition());
+      if (laying.infoItemAtTop) {
+        positions.add(_generateInfoItemPosition());
+      } else {
+        positions.insert(0, _generateInfoItemPosition());
+      }
     }
   }
 

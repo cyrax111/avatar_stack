@@ -49,12 +49,25 @@ enum StackAlign {
   center,
 }
 
+/// The way to tile items.
 class StackLaying {
   const StackLaying({
-    required this.topPosition,
-  }) : assert(topPosition >= 0, 'topPosition must be positive');
-  const StackLaying.first() : topPosition = 0;
-  const StackLaying.last() : topPosition = maxInt;
+    required this.itemPositionNumberAtTop,
+    this.infoItemAtTop = false,
+  }) : assert(itemPositionNumberAtTop >= 0,
+            'itemPositionNumberAtTop must be positive');
+  static const StackLaying first = StackLaying(
+    itemPositionNumberAtTop: 0,
+    infoItemAtTop: false,
+  );
+  static const StackLaying last = StackLaying(
+    itemPositionNumberAtTop: maxInt,
+    infoItemAtTop: true,
+  );
 
-  final int topPosition;
+  /// Which item position is at the top. Other items are at the bottom.
+  final int itemPositionNumberAtTop;
+
+  /// Defines wether an info item is at the top or at the bottom.
+  final bool infoItemAtTop;
 }

@@ -305,7 +305,7 @@ class Example9 extends StatelessWidget {
     final settings = RestrictedPositions(
       maxCoverage: 0.3,
       minCoverage: 0.1,
-      laying: const StackLaying.first(),
+      laying: StackLaying.first,
     );
     return Column(
       children: [
@@ -331,7 +331,7 @@ class Example10 extends StatelessWidget {
     final settings = RestrictedPositions(
       maxCoverage: 0.3,
       minCoverage: 0.1,
-      laying: const StackLaying(topPosition: 5),
+      laying: const StackLaying(itemPositionNumberAtTop: 5),
     );
     return Column(
       children: [
