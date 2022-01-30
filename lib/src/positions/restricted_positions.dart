@@ -36,6 +36,7 @@ class RestrictedPositions implements Positions {
   final double infoIndent;
   double get _infoIndent => _isInfoItem ? infoIndent : 0;
 
+  /// The way to tile items.
   late StackLaying laying;
 
   late double _width;
