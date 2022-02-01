@@ -1,3 +1,8 @@
+## 1.0.0
+
+* Added tests
+* Refactored code
+
 ## 0.5.0
 
 * Added positional parameter of the additional space between an info item and other items
