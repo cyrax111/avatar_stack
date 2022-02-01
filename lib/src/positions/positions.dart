@@ -31,6 +31,18 @@ class ItemPosition {
   String toString() {
     return 'ItemPosition(number: $number, position: $position)';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is ItemPosition &&
+        other.number == number &&
+        other.position == position;
+  }
+
+  @override
+  int get hashCode => number.hashCode ^ position.hashCode;
 }
 
 /// InfoItemPosition consists coordinates, order and information about
@@ -39,7 +51,7 @@ class InfoItemPosition extends ItemPosition {
   InfoItemPosition({
     required int number,
     required double position,
-    this.amountAdditionalItems = 0,
+    required this.amountAdditionalItems,
   })  : assert(amountAdditionalItems != 0),
         super(number: number, position: position);
 
@@ -50,6 +62,21 @@ class InfoItemPosition extends ItemPosition {
   String toString() {
     return 'InfoItemPosition(number: $number, position: $position, additionalItems: $amountAdditionalItems)';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is InfoItemPosition &&
+        other.amountAdditionalItems == amountAdditionalItems &&
+        other.number == number &&
+        other.position == position;
+    ;
+  }
+
+  @override
+  int get hashCode =>
+      number.hashCode ^ position.hashCode ^ amountAdditionalItems.hashCode;
 }
 
 /// Whether and how to align avatars horizontally.
