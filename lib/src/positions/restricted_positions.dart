@@ -160,12 +160,11 @@ class RestrictedPositions implements Positions {
         position: number * _offsetStep + _alignmentOffset,
       );
 
-  ItemPosition _generateInfoItemPosition() => ItemPosition(
+  ItemPosition _generateInfoItemPosition() => InfoItemPosition(
         number: _allowedAmountItems - 1,
         position: (_allowedAmountItems - 1) * _offsetStep +
             _alignmentOffset +
             _infoIndent,
-        isInformationalItem: true,
         amountAdditionalItems:
             _amountHiddenItems + 1, // we also replace one item with infoItem
       );

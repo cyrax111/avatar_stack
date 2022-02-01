@@ -49,7 +49,7 @@ class WidgetStack extends StatelessWidget {
   Widget _buildStackedWidgetOrInfoWidget({
     required ItemPosition position,
   }) {
-    if (position.isInformationalItem) {
+    if (position is InfoItemPosition) {
       return buildInfoWidget(position.amountAdditionalItems);
     } else {
       return stackedWidgets[position.number];

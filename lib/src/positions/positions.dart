@@ -14,16 +14,12 @@ abstract class Positions {
   List<ItemPosition> calculate();
 }
 
-/// ItemPosition consists coordinates, order and information about
-/// last (information) item
+/// ItemPosition consists coordinates, order
 class ItemPosition {
   ItemPosition({
     required this.number,
     required this.position,
-    this.isInformationalItem = false,
-    this.amountAdditionalItems = 0,
-  }) : assert(isInformationalItem && amountAdditionalItems != 0 ||
-            !isInformationalItem && amountAdditionalItems == 0);
+  });
 
   /// Ordinal number
   final int number;
@@ -31,10 +27,29 @@ class ItemPosition {
   /// Coordinate
   final double position;
 
-  /// Is the item last (information) which shows amount of additional (hidden)
-  /// items
-  final bool isInformationalItem;
+  @override
+  String toString() {
+    return 'ItemPosition(number: $number, position: $position)';
+  }
+}
+
+/// InfoItemPosition consists coordinates, order and information about
+/// last (information) item
+class InfoItemPosition extends ItemPosition {
+  InfoItemPosition({
+    required int number,
+    required double position,
+    this.amountAdditionalItems = 0,
+  })  : assert(amountAdditionalItems != 0),
+        super(number: number, position: position);
+
+  /// Shows amount of additional (hidden) items.
   final int amountAdditionalItems;
+
+  @override
+  String toString() {
+    return 'InfoItemPosition(number: $number, position: $position, additionalItems: $amountAdditionalItems)';
+  }
 }
 
 /// Whether and how to align avatars horizontally.
