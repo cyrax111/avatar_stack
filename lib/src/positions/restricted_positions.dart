@@ -102,21 +102,16 @@ class RestrictedPositions implements Positions {
         _allowedAmountItems * _offsetStep +
         _spaceBetweenItems -
         _infoIndent;
-    late double alignmentOffset;
     switch (align) {
       case StackAlign.left:
-        alignmentOffset = 0;
-        break;
+        return 0;
       case StackAlign.right:
-        alignmentOffset = freeSpace;
-        break;
+        return freeSpace;
       case StackAlign.center:
-        alignmentOffset = freeSpace / 2;
-        break;
+        return freeSpace / 2;
       default:
-        alignmentOffset = 0;
+        return 0;
     }
-    return alignmentOffset;
   }
 
   List<ItemPosition> _generatePositions() {
@@ -200,11 +195,13 @@ class RestrictedAmountPositions extends RestrictedPositions {
     this.maxAmountItems = 5,
     StackAlign align = StackAlign.left,
     double infoIndent = 0.0,
+    StackLaying laying = StackLaying.last,
   }) : super(
           maxCoverage: maxCoverage,
           minCoverage: minCoverage,
           align: align,
           infoIndent: infoIndent,
+          laying: laying,
         );
 
   /// The maximum amount of items to show
