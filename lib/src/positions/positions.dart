@@ -71,7 +71,6 @@ class InfoItemPosition extends ItemPosition {
         other.amountAdditionalItems == amountAdditionalItems &&
         other.number == number &&
         other.position == position;
-    ;
   }
 
   @override
