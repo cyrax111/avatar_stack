@@ -1,3 +1,7 @@
+## 1.0.1
+
+* Added CI
+
 ## 1.0.0
 
 * Added tests

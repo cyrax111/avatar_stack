@@ -1,5 +1,9 @@
 # Avatar stack package for Flutter
 
+[![Build Status](https://github.com/cyrax111/avatar_stack/workflows/Dart%20CI/badge.svg)](https://github.com/cyrax111/avatar_stack/actions?query=workflow%3A"Dart+CI"+branch%3Amaster)
+[![Coverage Status](https://coveralls.io/repos/github/cyrax111/avatar_stack/badge.svg?branch=master)](https://coveralls.io/github/cyrax111/avatar_stack?branch=master)
+[![Pub](https://img.shields.io/pub/v/avatar_stack)](https://pub.dev/packages/avatar_stack)
+
 Avatar stack is used to visually represent users, places, and things in an app.
 
 ![Example](https://github.com/cyrax111/blob/raw/master/avatar_stack/feature1.gif?raw=true)
