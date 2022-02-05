@@ -1,3 +1,9 @@
+## 1.0.2
+
+* Made code more robust
+* Added tests
+* Updated dependencies
+
 ## 1.0.1
 
 * Added CI
