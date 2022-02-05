@@ -26,6 +26,12 @@ class WidgetStack extends StatelessWidget {
   Widget build(BuildContext context) {
     positions.setAmountItems(stackedWidgets.length);
     return LayoutBuilder(builder: (context, BoxConstraints constraints) {
+      final isNotEnoughSpace =
+          constraints.maxWidth <= 0 || constraints.maxHeight <= 0;
+      if (isNotEnoughSpace) {
+        return const SizedBox.shrink();
+      }
+
       positions.setSize(
         width: constraints.maxWidth,
         height: constraints.maxHeight,

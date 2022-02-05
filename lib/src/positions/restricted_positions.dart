@@ -43,6 +43,8 @@ class RestrictedPositions implements Positions {
   late double _height;
   @override
   void setSize({required double width, required double height}) {
+    assert(width > 0, 'width has to be more then zero');
+    assert(height > 0, 'height has to be more then zero');
     _width = width;
     _height = height;
   }
