@@ -100,6 +100,40 @@ void main() {
 
       expect(calculatedPositions, equals(expectedPositions));
     });
+
+    test('set wrong size', () {
+      final defaultPositions = RestrictedPositions();
+
+      expect(
+        () => defaultPositions.setSize(width: 30, height: 0),
+        throwsAssertionError,
+      );
+
+      expect(
+        () => defaultPositions.setSize(width: 30, height: -7),
+        throwsAssertionError,
+      );
+
+      expect(
+        () => defaultPositions.setSize(width: 0, height: 20),
+        throwsAssertionError,
+      );
+
+      expect(
+        () => defaultPositions.setSize(width: -80, height: 20),
+        throwsAssertionError,
+      );
+
+      expect(
+        () => defaultPositions.setSize(width: 0, height: 0),
+        throwsAssertionError,
+      );
+
+      expect(
+        () => defaultPositions.setSize(width: 200, height: 10),
+        returnsNormally,
+      );
+    });
   });
 
   group('RestrictedAmountPositions -', () {
