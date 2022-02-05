@@ -1,3 +1,7 @@
+## 1.0.3
+
+* Fixed a dependency error
+
 ## 1.0.2
 
 * Made code more robust
