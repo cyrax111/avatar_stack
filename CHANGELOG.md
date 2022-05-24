@@ -1,3 +1,7 @@
+## 1.0.6
+
+* Fixed a dependency error.
+
 ## 1.0.5
 
 * Updated dependencies
