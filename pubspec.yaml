@@ -4,7 +4,7 @@ version: 1.0.6
 repository: https://github.com/cyrax111/avatar_stack
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=2.16.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
