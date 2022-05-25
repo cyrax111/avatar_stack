@@ -1,10 +1,10 @@
 name: avatar_stack
 description: Advanced and agile avatar stack with settings. It allows to place a lot of avatars or another widgets in small place.
-version: 1.0.8
+version: 1.0.9
 repository: https://github.com/cyrax111/avatar_stack
 
 environment:
-  sdk: ">=2.17.1 <3.0.0"
+  sdk: ">=2.15.1 <3.0.0"
   flutter: ">=3.0.1"
 
 dependencies:
