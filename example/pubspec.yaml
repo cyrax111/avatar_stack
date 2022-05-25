@@ -3,7 +3,7 @@ description: An example for stack_avatar package
 
 publish_to: 'none' 
 
-version: 1.0.0+2
+version: 1.0.0+3
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
@@ -20,7 +20,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^1.0.4
+  flutter_lints: ^2.0.1
 
 flutter:
   uses-material-design: true
