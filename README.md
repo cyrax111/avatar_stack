@@ -51,8 +51,9 @@ The way to tile items.
 #### *the fifth item is at the top*
 ![Indent of an info item](https://github.com/cyrax111/blob/raw/master/avatar_stack/the_fifth_item_is_at_the_top.png?raw=true)
 
-## Example
+## Examples
 
+Avatar stack:
 ```dart
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:flutter/material.dart';
@@ -93,4 +94,72 @@ class AvatarStackExample extends StatelessWidget {
 }
 ```
 
+One can use any widget for stacking. Apply `WidgetStack` widget for that. For example:
+```dart
+import 'package:avatar_stack/avatar_stack.dart';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MaterialApp(home: Example7WidgetStack()));
+}
+
+class Example7WidgetStack extends StatelessWidget {
+  const Example7WidgetStack({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = RestrictedPositions(
+      maxCoverage: -0.1,
+      minCoverage: -0.5,
+      align: StackAlign.right,
+    );
+    return Column(
+      children: [
+        const Text(
+          'Any widgets for stack:',
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 50,
+          child: WidgetStack(
+            positions: settings,
+            stackedWidgets: [
+              for (var n = 0; n < 12; n++)
+                FlutterLogo(
+                  style: FlutterLogoStyle.stacked,
+                  textColor: Color(0xFF * 0x1000000 +
+                      n * 10 * 0x10000 +
+                      (0xFF - n * 10) * 0x100),
+                ),
+              const FittedBox(
+                  fit: BoxFit.fitHeight,
+                  child: Text('A',
+                      style: TextStyle(height: 0.9, color: Colors.orange))),
+              const FittedBox(
+                  fit: BoxFit.fitHeight,
+                  child: Text('B', style: TextStyle(height: 0.9))),
+              const FittedBox(
+                  fit: BoxFit.fitHeight,
+                  child: Text('C',
+                      style: TextStyle(height: 0.9, color: Colors.green))),
+            ],
+            buildInfoWidget: (surplus) {
+              return Center(
+                  child: Text(
+                '+$surplus',
+                style: Theme.of(context).textTheme.headline5,
+              ));
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+```
+
 You can also use the example from github [https://github.com/cyrax111/avatar_stack/tree/master/example](https://github.com/cyrax111/avatar_stack/tree/master/example)
+
+## Ideas
+
+If you have any ideas on how to enhance this package or have any concern, feel free to make an [issue](https://github.com/cyrax111/avatar_stack/issues).

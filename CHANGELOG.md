@@ -1,3 +1,7 @@
+## 1.1.1
+
+* Enhanced readme.
+
 ## 1.1.0
 
 * Fixed a dependency error.
