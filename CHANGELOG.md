@@ -1,3 +1,7 @@
+## 1.1.2
+
+* Added background color to BorderedCircleAvatar.
+
 ## 1.1.1
 
 * Enhanced readme.

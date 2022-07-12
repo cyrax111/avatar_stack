@@ -103,11 +103,13 @@ class BorderedCircleAvatar extends StatelessWidget {
     Key? key,
     this.border = const BorderSide(),
     this.backgroundImage,
+    this.backgroundColor,
     this.child,
   }) : super(key: key);
 
   final BorderSide border;
   final ImageProvider<Object>? backgroundImage;
+  final Color? backgroundColor;
   final Widget? child;
 
   @override
@@ -120,6 +122,7 @@ class BorderedCircleAvatar extends StatelessWidget {
           padding: EdgeInsets.all(border.width),
           child: CircleAvatar(
             backgroundImage: backgroundImage,
+            backgroundColor: backgroundColor,
             child: child,
           ),
         ),
