@@ -162,4 +162,4 @@ You can also use the example from github [https://github.com/cyrax111/avatar_sta
 
 ## Ideas
 
-If you have any ideas on how to enhance this package or have any concern, feel free to make an [issue](https://github.com/cyrax111/avatar_stack/issues).
+If you have any ideas on how to enhance this package or have any concern, feel free to make an [issue](https://github.com/cyrax111/range_type/issues).
