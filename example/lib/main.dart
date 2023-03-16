@@ -12,33 +12,46 @@ class AvatarStackExample extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Example')),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const <Widget>[
-              Example1Default(),
-              Indent(),
-              Example9StackLayingFirst(),
-              Indent(),
-              Example10StackLayingFive(),
-              Indent(),
-              Example8InfoIndent(),
-              Indent(),
-              Example2MaxAmount(),
-              Indent(),
-              Example3MaxAmountCenterAlign(),
-              Indent(),
-              Example4RightAlign(),
-              Indent(),
-              Example5MaxCoverage(),
-              Indent(),
-              Example6MinCoverage(),
-              Indent(),
-              Example7WidgetStack(),
-            ],
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const <Widget>[
+                      Example1Default(),
+                      Indent(),
+                      Example9StackLayingFirst(),
+                      Indent(),
+                      Example10StackLayingFive(),
+                      Indent(),
+                      Example8InfoIndent(),
+                      Indent(),
+                      Example2MaxAmount(),
+                      Indent(),
+                      Example3MaxAmountCenterAlign(),
+                      Indent(),
+                      Example4RightAlign(),
+                      Indent(),
+                      Example5MaxCoverage(),
+                      Indent(),
+                      Example6MinCoverage(),
+                      Indent(),
+                      Example7WidgetStack(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const RotatedBox(
+              quarterTurns: 3,
+              child: Example1Default(name: 'Vertical'),
+            ),
+          ],
         ),
       ),
     );
@@ -53,15 +66,15 @@ class Indent extends StatelessWidget {
 }
 
 class Example1Default extends StatelessWidget {
-  const Example1Default({Key? key}) : super(key: key);
+  const Example1Default({this.name = 'Default:', Key? key}) : super(key: key);
+
+  final String name;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Text(
-          'Default:',
-        ),
+        Text(name),
         const SizedBox(height: 10),
         AvatarStack(
           height: 50,
@@ -325,6 +338,30 @@ class Example9StackLayingFirst extends StatelessWidget {
 
 class Example10StackLayingFive extends StatelessWidget {
   const Example10StackLayingFive({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = RestrictedPositions(
+      maxCoverage: 0.3,
+      minCoverage: 0.1,
+      laying: const StackLaying(itemPositionNumberAtTop: 5),
+    );
+    return Column(
+      children: [
+        const Text('The fifth item is at the top:'),
+        const SizedBox(height: 10),
+        AvatarStack(
+          height: 50,
+          settings: settings,
+          avatars: [for (var n = 0; n < 20; n++) NetworkImage(getAvatarUrl(n))],
+        ),
+      ],
+    );
+  }
+}
+
+class Example11Rotated extends StatelessWidget {
+  const Example11Rotated({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
