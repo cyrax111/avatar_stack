@@ -259,7 +259,7 @@ class Example7WidgetStack extends StatelessWidget {
               return Center(
                   child: Text(
                 '+$surplus',
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headlineSmall,
               ));
             },
           ),
@@ -303,7 +303,7 @@ class Example8InfoIndent extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Text(
           '+$surplus',
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
     );

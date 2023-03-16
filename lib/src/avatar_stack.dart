@@ -75,7 +75,7 @@ class AvatarStack extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 '+$surplus',
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             )));
     final _infoWidgetBuilder = infoWidgetBuilder ?? _textInfoWidgetBuilder;
