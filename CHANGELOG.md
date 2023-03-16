@@ -1,3 +1,8 @@
+## 1.1.3
+
+* Added vertical example
+* Removed deprecated headlines
+
 ## 1.1.2
 
 * Added background color to BorderedCircleAvatar.
