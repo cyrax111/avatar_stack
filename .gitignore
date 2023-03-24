@@ -29,3 +29,5 @@
 build/
 
 **/failures/
+
+coverage/lcov.info
