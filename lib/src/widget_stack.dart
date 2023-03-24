@@ -40,10 +40,11 @@ class WidgetStack extends StatelessWidget {
       return Stack(
         children: positions.calculate().map((position) {
           return Positioned(
-            left: position.position,
+            left: position.x,
+            top: position.y,
             child: SizedBox(
-              height: constraints.maxHeight,
-              width: constraints.maxHeight,
+              height: position.size,
+              width: position.size,
               child: _buildStackedWidgetOrInfoWidget(position: position),
             ),
           );

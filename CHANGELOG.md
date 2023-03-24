@@ -1,7 +1,12 @@
+## 1.2.0
+
+* Added vertical layout direction.
+* Fixed link in readme.
+
 ## 1.1.3
 
-* Added vertical example
-* Removed deprecated headlines
+* Added vertical example.
+* Removed deprecated headlines.
 
 ## 1.1.2
 

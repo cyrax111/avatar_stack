@@ -12,6 +12,7 @@ class RestrictedPositions implements Positions {
     this.align = StackAlign.left,
     this.infoIndent = 0.0,
     this.laying = StackLaying.last,
+    this.layoutDirection = LayoutDirection.horizontal,
   });
 
   /// Define minimum items coverage.
@@ -39,14 +40,25 @@ class RestrictedPositions implements Positions {
   /// The way to tile items.
   late StackLaying laying;
 
+  final LayoutDirection layoutDirection;
+
   late double _width;
   late double _height;
   @override
   void setSize({required double width, required double height}) {
     assert(width > 0, 'width has to be more then zero');
     assert(height > 0, 'height has to be more then zero');
-    _width = width;
-    _height = height;
+
+    switch (layoutDirection) {
+      case LayoutDirection.horizontal:
+        _width = width;
+        _height = height;
+        break;
+      case LayoutDirection.vertical:
+        _width = height;
+        _height = width;
+        break;
+    }
   }
 
   late int _fullAmountItems;
@@ -152,19 +164,44 @@ class RestrictedPositions implements Positions {
     }
   }
 
-  ItemPosition _generateItemPosition(int number) => ItemPosition(
+  ItemPosition _generateItemPosition(int number) =>
+      _getItemPositionByLayoutDirection(
         number: number,
         position: number * _offsetStep + _alignmentOffset,
       );
 
-  ItemPosition _generateInfoItemPosition() => InfoItemPosition(
-        number: _allowedAmountItems - 1,
-        position: (_allowedAmountItems - 1) * _offsetStep +
-            _alignmentOffset +
-            _infoIndent,
+  ItemPosition _generateInfoItemPosition() => InfoItemPosition.fromItemPosition(
         amountAdditionalItems:
             _amountHiddenItems + 1, // we also replace one item with infoItem
+        itemPosition: _getItemPositionByLayoutDirection(
+          number: _allowedAmountItems - 1,
+          position: (_allowedAmountItems - 1) * _offsetStep +
+              _alignmentOffset +
+              _infoIndent,
+        ),
       );
+
+  ItemPosition _getItemPositionByLayoutDirection({
+    required int number,
+    required double position,
+  }) {
+    switch (layoutDirection) {
+      case LayoutDirection.horizontal:
+        return ItemPosition(
+          number: number,
+          x: position,
+          y: 0,
+          size: _itemSize,
+        );
+      case LayoutDirection.vertical:
+        return ItemPosition(
+          number: number,
+          x: 0,
+          y: position,
+          size: _itemSize,
+        );
+    }
+  }
 
   bool get _isInfoItem => _amountHiddenItems > 0;
 
@@ -198,6 +235,7 @@ class RestrictedAmountPositions extends RestrictedPositions {
     StackAlign align = StackAlign.left,
     double infoIndent = 0.0,
     StackLaying laying = StackLaying.last,
+    super.layoutDirection = LayoutDirection.horizontal,
   }) : super(
           maxCoverage: maxCoverage,
           minCoverage: minCoverage,
