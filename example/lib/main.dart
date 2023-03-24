@@ -47,9 +47,10 @@ class AvatarStackExample extends StatelessWidget {
                 ),
               ),
             ),
+            const Example11Vertical(),
             const RotatedBox(
               quarterTurns: 3,
-              child: Example1Default(name: 'Vertical'),
+              child: Example1Default(name: 'RotatedBox'),
             ),
           ],
         ),
@@ -360,8 +361,8 @@ class Example10StackLayingFive extends StatelessWidget {
   }
 }
 
-class Example11Rotated extends StatelessWidget {
-  const Example11Rotated({Key? key}) : super(key: key);
+class Example11Vertical extends StatelessWidget {
+  const Example11Vertical({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -369,17 +370,23 @@ class Example11Rotated extends StatelessWidget {
       maxCoverage: 0.3,
       minCoverage: 0.1,
       laying: const StackLaying(itemPositionNumberAtTop: 5),
+      layoutDirection: LayoutDirection.vertical,
     );
-    return Column(
-      children: [
-        const Text('The fifth item is at the top:'),
-        const SizedBox(height: 10),
-        AvatarStack(
-          height: 50,
-          settings: settings,
-          avatars: [for (var n = 0; n < 20; n++) NetworkImage(getAvatarUrl(n))],
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Row(
+        children: [
+          const RotatedBox(quarterTurns: 3, child: Text('Vertical')),
+          const SizedBox(width: 10),
+          AvatarStack(
+            width: 50,
+            settings: settings,
+            avatars: [
+              for (var n = 0; n < 20; n++) NetworkImage(getAvatarUrl(n))
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
