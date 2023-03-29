@@ -1,3 +1,7 @@
+## 1.2.1
+
+* Added an example "Vertical widget stack"
+
 ## 1.2.0
 
 * Added vertical layout direction.

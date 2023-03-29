@@ -1,7 +1,9 @@
 name: avatar_stack
 description: Advanced and agile avatar stack with settings. It allows to place a lot of avatars or another widgets in small place.
-version: 1.2.0
+maintainer: Alexander Bosak (bskaxe@gmail.com)
+issue_tracker: https://github.com/cyrax111/avatar_stack/issues
 repository: https://github.com/cyrax111/avatar_stack
+version: 1.2.1
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
