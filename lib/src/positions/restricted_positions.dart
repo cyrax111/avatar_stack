@@ -10,7 +10,7 @@ class RestrictedPositions implements Positions {
     this.maxCoverage = 0.8,
     this.minCoverage = double.negativeInfinity,
     this.align = StackAlign.left,
-    this.infoIndent = 0.0,
+    this.infoItem = const InfoItem.absent(),
     this.laying = StackLaying.last,
     this.layoutDirection = LayoutDirection.horizontal,
   });
@@ -32,18 +32,19 @@ class RestrictedPositions implements Positions {
   /// Alignment
   final StackAlign align;
 
-  /// The additional space between an info item (if exists) and other items.
   /// Info item usually has information about hidden items. Something like: (+5)
-  final double infoIndent;
-  double get _infoIndent => _isInfoItem ? infoIndent : 0;
+  /// Contains the additional space between an info item (if exists) and other items
+  /// and size of the info item.
+  final InfoItem infoItem;
+  InfoItem get _infoItem => infoItem;
 
   /// The way to tile items.
   late StackLaying laying;
 
   final LayoutDirection layoutDirection;
 
-  late double _width;
-  late double _height;
+  late double _length;
+  late double _tallness;
   @override
   void setSize({required double width, required double height}) {
     assert(width > 0, 'width has to be more then zero');
@@ -51,12 +52,12 @@ class RestrictedPositions implements Positions {
 
     switch (layoutDirection) {
       case LayoutDirection.horizontal:
-        _width = width;
-        _height = height;
+        _length = width;
+        _tallness = height;
         break;
       case LayoutDirection.vertical:
-        _width = height;
-        _height = width;
+        _length = height;
+        _tallness = width;
         break;
     }
   }
@@ -69,6 +70,8 @@ class RestrictedPositions implements Positions {
 
   late int _allowedAmountItems;
   late int _allowedBySpaceAndMaxCoverageAmountItems;
+  late int _amountHiddenItems;
+  late bool _isInfoItem;
   late double _spaceBetweenItems;
   late double _offsetStep;
   late double _alignmentOffset;
@@ -77,19 +80,43 @@ class RestrictedPositions implements Positions {
   List<ItemPosition> calculate() {
     _allowedBySpaceAndMaxCoverageAmountItems = _calculateMaxCapacityItems();
     _allowedAmountItems = _getAmountItems();
-    _spaceBetweenItems = _calculateSpaceBetweenItems();
+    _amountHiddenItems = _fullAmountItems - _allowedAmountItems;
+    _isInfoItem = _amountHiddenItems > 0;
+    if (_isInfoItem) {
+      _allowedBySpaceAndMaxCoverageAmountItems =
+          _calculateMaxCapacityItemsWithInfoItem();
+      _allowedAmountItems = _allowedBySpaceAndMaxCoverageAmountItems;
+      _amountHiddenItems = _fullAmountItems - _allowedAmountItems + 1;
+      _spaceBetweenItems = _calculateSpaceBetweenItemsWithInfoItem();
+    } else {
+      _spaceBetweenItems = _calculateSpaceBetweenItems();
+    }
     _offsetStep = _calculateOffsetStep();
     _alignmentOffset = _getAlignmentOffset();
     return _generatePositions();
   }
 
   int _calculateMaxCapacityItems() {
-    final capacity = _width / (_itemSize + _getSpaceBetweenItemsBy(coverage: maxCoverage));
-    return capacity.toInt();
+    const lastItem = 1;
+    final lastItemSize = _itemSize;
+    final capacity = (_length - lastItemSize) /
+        (_itemSize + _getSpaceBetweenItemsBy(coverage: maxCoverage));
+    return capacity.toInt() + lastItem;
   }
 
   int _getAmountItems() {
     return min(_fullAmountItems, _allowedBySpaceAndMaxCoverageAmountItems);
+  }
+
+  int _getAmountHiddenItems() {
+    return _fullAmountItems - _allowedAmountItems + 1;
+  }
+
+  int _calculateMaxCapacityItemsWithInfoItem() {
+    final infoItemLength = infoItem.indent + (infoItem.size ?? _itemSize);
+    final capacity = (_length - infoItemLength) /
+        (_itemSize + _getSpaceBetweenItemsBy(coverage: maxCoverage));
+    return capacity.toInt() + 1;
   }
 
   double _calculateSpaceBetweenItems() {
@@ -98,7 +125,25 @@ class RestrictedPositions implements Positions {
     }
 
     final spaceBetweenItemsForFullWidth =
-        (_width - _infoIndent - _itemSize * _allowedAmountItems) / (_allowedAmountItems - 1);
+        (_length - _itemSize * _allowedAmountItems) / (_allowedAmountItems - 1);
+    final spaceBetweenItemsWithMinCoverageRestriction =
+        _getSpaceBetweenItemsBy(coverage: minCoverage);
+    return min(spaceBetweenItemsForFullWidth,
+        spaceBetweenItemsWithMinCoverageRestriction);
+  }
+
+  double _calculateSpaceBetweenItemsWithInfoItem() {
+    assert(_isInfoItem);
+
+    if (_allowedAmountItems <= 1) {
+      return 0;
+    }
+
+    final itemsSizesSum = _itemSize * (_allowedAmountItems - 1) +
+        (_infoItem.size ?? _itemSize) +
+        _infoItem.indent;
+    final spaceBetweenItemsForFullWidth =
+        (_length - itemsSizesSum) / (_allowedAmountItems - 1);
     final spaceBetweenItemsWithMinCoverageRestriction =
         _getSpaceBetweenItemsBy(coverage: minCoverage);
     return min(spaceBetweenItemsForFullWidth, spaceBetweenItemsWithMinCoverageRestriction);
@@ -109,7 +154,8 @@ class RestrictedPositions implements Positions {
   }
 
   double _getAlignmentOffset() {
-    final freeSpace = _width - _allowedAmountItems * _offsetStep + _spaceBetweenItems - _infoIndent;
+    final freeSpace =
+        _length - _allowedAmountItems * _offsetStep + _spaceBetweenItems;
     switch (align) {
       case StackAlign.left:
         return 0;
@@ -159,13 +205,17 @@ class RestrictedPositions implements Positions {
         position: number * _offsetStep + _alignmentOffset,
       );
 
-  ItemPosition _generateInfoItemPosition() => InfoItemPosition.fromItemPosition(
-        amountAdditionalItems: _amountHiddenItems + 1, // we also replace one item with infoItem
-        itemPosition: _getItemPositionByLayoutDirection(
-          number: _allowedAmountItems - 1,
-          position: (_allowedAmountItems - 1) * _offsetStep + _alignmentOffset + _infoIndent,
-        ),
-      );
+  ItemPosition _generateInfoItemPosition() {
+    final number = _allowedAmountItems - 1;
+    return InfoItemPosition.fromItemPosition(
+      amountAdditionalItems: _amountHiddenItems,
+      size: _infoItem.size ?? _itemSize,
+      itemPosition: _getItemPositionByLayoutDirection(
+        number: number,
+        position: number * _offsetStep + _alignmentOffset + _infoItem.indent,
+      ),
+    );
+  }
 
   ItemPosition _getItemPositionByLayoutDirection({
     required int number,
@@ -189,10 +239,6 @@ class RestrictedPositions implements Positions {
     }
   }
 
-  bool get _isInfoItem => _amountHiddenItems > 0;
-
-  int get _amountHiddenItems => _fullAmountItems - _allowedAmountItems;
-
   int get _itemToFill {
     int itemToFill;
     if (_isInfoItem) {
@@ -207,7 +253,7 @@ class RestrictedPositions implements Positions {
     return _itemSize * (-1 * coverage);
   }
 
-  double get _itemSize => _height;
+  double get _itemSize => _tallness;
 }
 
 /// Defines coordinates of common items and an information item
@@ -218,11 +264,15 @@ class RestrictedAmountPositions extends RestrictedPositions {
     super.maxCoverage,
     super.minCoverage,
     this.maxAmountItems = 5,
-    super.align,
-    super.infoIndent,
-    super.laying,
+    StackAlign align = StackAlign.left,
+    InfoItem infoItem = const InfoItem.absent(),
+    StackLaying laying = StackLaying.last,
     super.layoutDirection = LayoutDirection.horizontal,
-  });
+  }) : super(
+          align: align,
+          infoItem: infoItem,
+          laying: laying,
+        );
 
   /// The maximum amount of items to show
   final int maxAmountItems;

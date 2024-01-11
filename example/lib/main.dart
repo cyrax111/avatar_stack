@@ -275,7 +275,7 @@ class Example8InfoIndent extends StatelessWidget {
       maxCoverage: 0.3,
       minCoverage: 0.1,
       align: StackAlign.right,
-      infoIndent: 15,
+      infoItem: const InfoItem(indent: 15.0),
     );
     return Column(
       children: [
@@ -342,6 +342,10 @@ class Example10StackLayingFive extends StatelessWidget {
       maxCoverage: 0.3,
       minCoverage: 0.1,
       laying: const StackLaying(itemPositionNumberAtTop: 5),
+      infoItem: InfoItem(
+        indent: 100,
+        size: 100,
+      ),
     );
     return Column(
       children: [
@@ -351,6 +355,13 @@ class Example10StackLayingFive extends StatelessWidget {
           height: 50,
           settings: settings,
           avatars: [for (var n = 0; n < 20; n++) NetworkImage(getAvatarUrl(n))],
+          infoWidgetBuilder: (surplus) {
+            return Container(
+              color: Colors.red,
+              width: 100,
+              child: Center(child: Text(surplus.toString())),
+            );
+          },
         ),
       ],
     );

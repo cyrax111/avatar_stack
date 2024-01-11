@@ -67,9 +67,9 @@ class InfoItemPosition extends ItemPosition {
   InfoItemPosition.fromItemPosition({
     required this.amountAdditionalItems,
     required ItemPosition itemPosition,
+    required super.size,
   }) : super(
           number: itemPosition.number,
-          size: itemPosition.size,
           x: itemPosition.x,
           y: itemPosition.y,
         );
@@ -140,4 +140,20 @@ enum LayoutDirection {
 
   /// Items laying in vertical way
   vertical,
+}
+
+/// Info item
+/// Usually has information about hidden items. Something like: (+5)
+class InfoItem {
+  const InfoItem({required this.indent, this.size});
+  const InfoItem.absent()
+      : indent = 0.0,
+        size = null;
+
+  /// The additional space between an info item (if exists) and other items.
+  final double indent;
+
+  /// Size of the info item
+  /// If [size] is null the size match the regular item
+  final double? size;
 }
