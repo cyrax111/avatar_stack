@@ -12,17 +12,17 @@ class AvatarStackExample extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Example')),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
+      body: const Padding(
+        padding: EdgeInsets.all(8.0),
         child: Row(
           children: [
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
+                  padding: EdgeInsets.only(right: 8.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[
+                    children: <Widget>[
                       Example1Default(),
                       Indent(),
                       Example9StackLayingFirst(),
@@ -47,9 +47,9 @@ class AvatarStackExample extends StatelessWidget {
                 ),
               ),
             ),
-            const Example11Vertical(),
-            const Example12Vertical(),
-            const RotatedBox(
+            Example11Vertical(),
+            Example12Vertical(),
+            RotatedBox(
               quarterTurns: 3,
               child: Example1Default(name: 'RotatedBox'),
             ),
@@ -241,21 +241,16 @@ class Example7WidgetStack extends StatelessWidget {
               for (var n = 0; n < 12; n++)
                 FlutterLogo(
                   style: FlutterLogoStyle.stacked,
-                  textColor: Color(0xFF * 0x1000000 +
-                      n * 10 * 0x10000 +
-                      (0xFF - n * 10) * 0x100),
+                  textColor: Color(0xFF * 0x1000000 + n * 10 * 0x10000 + (0xFF - n * 10) * 0x100),
                 ),
               const FittedBox(
                   fit: BoxFit.fitHeight,
-                  child: Text('A',
-                      style: TextStyle(height: 0.9, color: Colors.orange))),
+                  child: Text('A', style: TextStyle(height: 0.9, color: Colors.orange))),
+              const FittedBox(
+                  fit: BoxFit.fitHeight, child: Text('B', style: TextStyle(height: 0.9))),
               const FittedBox(
                   fit: BoxFit.fitHeight,
-                  child: Text('B', style: TextStyle(height: 0.9))),
-              const FittedBox(
-                  fit: BoxFit.fitHeight,
-                  child: Text('C',
-                      style: TextStyle(height: 0.9, color: Colors.green))),
+                  child: Text('C', style: TextStyle(height: 0.9, color: Colors.green))),
             ],
             buildInfoWidget: (surplus) {
               return Center(
@@ -377,15 +372,12 @@ class Example11Vertical extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Row(
         children: [
-          const RotatedBox(
-              quarterTurns: 3, child: Text('Vertical avatar stack')),
+          const RotatedBox(quarterTurns: 3, child: Text('Vertical avatar stack')),
           const SizedBox(width: 10),
           AvatarStack(
             width: 50,
             settings: settings,
-            avatars: [
-              for (var n = 0; n < 20; n++) NetworkImage(getAvatarUrl(n))
-            ],
+            avatars: [for (var n = 0; n < 20; n++) NetworkImage(getAvatarUrl(n))],
           ),
         ],
       ),
@@ -408,8 +400,7 @@ class Example12Vertical extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Row(
         children: [
-          const RotatedBox(
-              quarterTurns: 3, child: Text('Vertical widget stack')),
+          const RotatedBox(quarterTurns: 3, child: Text('Vertical widget stack')),
           const SizedBox(width: 10),
           SizedBox(
             width: 50,
@@ -419,21 +410,16 @@ class Example12Vertical extends StatelessWidget {
                 for (var n = 0; n < 12; n++)
                   FlutterLogo(
                     style: FlutterLogoStyle.stacked,
-                    textColor: Color(0xFF * 0x1000000 +
-                        n * 10 * 0x10000 +
-                        (0xFF - n * 10) * 0x100),
+                    textColor: Color(0xFF * 0x1000000 + n * 10 * 0x10000 + (0xFF - n * 10) * 0x100),
                   ),
                 const FittedBox(
                     fit: BoxFit.fitHeight,
-                    child: Text('A',
-                        style: TextStyle(height: 0.9, color: Colors.orange))),
+                    child: Text('A', style: TextStyle(height: 0.9, color: Colors.orange))),
+                const FittedBox(
+                    fit: BoxFit.fitHeight, child: Text('B', style: TextStyle(height: 0.9))),
                 const FittedBox(
                     fit: BoxFit.fitHeight,
-                    child: Text('B', style: TextStyle(height: 0.9))),
-                const FittedBox(
-                    fit: BoxFit.fitHeight,
-                    child: Text('C',
-                        style: TextStyle(height: 0.9, color: Colors.green))),
+                    child: Text('C', style: TextStyle(height: 0.9, color: Colors.green))),
               ],
               buildInfoWidget: (surplus) {
                 return Center(
