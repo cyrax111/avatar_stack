@@ -122,7 +122,7 @@ class BorderedCircleAvatar extends StatelessWidget {
           padding: EdgeInsets.all(border.width),
           child: CircleAvatar(
             backgroundImage: backgroundImage,
-            backgroundColor: backgroundColor,
+            backgroundColor: Colors.transparent,
             child: child,
           ),
         ),
