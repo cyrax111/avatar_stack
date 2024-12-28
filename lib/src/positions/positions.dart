@@ -18,20 +18,13 @@ abstract class Positions {
 class ItemPosition {
   ItemPosition({
     required this.number,
-    @Deprecated(
-        '"position" is deprecated and will be removed after v2.0.0, use "x" and "y" instead')
-    double? position,
     required this.x,
     required this.y,
     required this.size,
-  }) : position = position ?? 0;
+  });
 
   /// Ordinal number
   final int number;
-
-  /// Coordinate
-  @Deprecated('"position" is deprecated and will be removed after v2.0.0, use "x" and "y" instead')
-  final double position;
 
   final double x;
   final double y;
@@ -39,7 +32,7 @@ class ItemPosition {
 
   @override
   String toString() {
-    return 'ItemPosition(number: $number, position: $position, x: $x, y: $y, size: $size)';
+    return 'ItemPosition(number: $number, x: $x, y: $y, size: $size)';
   }
 
   @override
@@ -48,14 +41,13 @@ class ItemPosition {
 
     return other is ItemPosition &&
         other.number == number &&
-        other.position == position &&
         other.x == x &&
         other.y == y &&
         other.size == size;
   }
 
   @override
-  int get hashCode => number.hashCode ^ position.hashCode ^ x.hashCode ^ y.hashCode ^ size.hashCode;
+  int get hashCode => number.hashCode ^ x.hashCode ^ y.hashCode ^ size.hashCode;
 }
 
 /// InfoItemPosition consists coordinates, order and information about
@@ -70,8 +62,7 @@ class InfoItemPosition extends ItemPosition {
     required super.x,
     required super.y,
     required super.size,
-  })  : assert(amountAdditionalItems != 0),
-        super(position: position);
+  }) : assert(amountAdditionalItems != 0);
 
   InfoItemPosition.fromItemPosition({
     required this.amountAdditionalItems,
@@ -88,7 +79,7 @@ class InfoItemPosition extends ItemPosition {
 
   @override
   String toString() {
-    return 'InfoItemPosition(number: $number, position: $position, additionalItems: $amountAdditionalItems, x: $x, y: $y, size: $size)';
+    return 'InfoItemPosition(number: $number, additionalItems: $amountAdditionalItems, x: $x, y: $y, size: $size)';
   }
 
   @override
@@ -98,7 +89,6 @@ class InfoItemPosition extends ItemPosition {
     return other is InfoItemPosition &&
         other.amountAdditionalItems == amountAdditionalItems &&
         other.number == number &&
-        other.position == position &&
         other.x == x &&
         other.y == y &&
         other.size == size;
@@ -106,12 +96,7 @@ class InfoItemPosition extends ItemPosition {
 
   @override
   int get hashCode =>
-      number.hashCode ^
-      position.hashCode ^
-      amountAdditionalItems.hashCode ^
-      x.hashCode ^
-      y.hashCode ^
-      size.hashCode;
+      number.hashCode ^ amountAdditionalItems.hashCode ^ x.hashCode ^ y.hashCode ^ size.hashCode;
 }
 
 /// Whether and how to align avatars horizontally.
