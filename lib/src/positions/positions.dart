@@ -4,7 +4,7 @@ import '../constants/max_int.dart'
 
 /// Base interface for positions.
 abstract class Positions {
-  /// Set size of area items are need to place in
+  /// Set size of area items are needed to place in
   void setSize({required double width, required double height});
 
   /// Set full amount of items
@@ -18,8 +18,9 @@ abstract class Positions {
 class ItemPosition {
   ItemPosition({
     required this.number,
-    @Deprecated('"position" is deprecated and will be removed after v2.0.0, use "x" and "y" instead')
-        double? position,
+    @Deprecated(
+        '"position" is deprecated and will be removed after v2.0.0, use "x" and "y" instead')
+    double? position,
     required this.x,
     required this.y,
     required this.size,
@@ -29,8 +30,7 @@ class ItemPosition {
   final int number;
 
   /// Coordinate
-  @Deprecated(
-      '"position" is deprecated and will be removed after v2.0.0, use "x" and "y" instead')
+  @Deprecated('"position" is deprecated and will be removed after v2.0.0, use "x" and "y" instead')
   final double position;
 
   final double x;
@@ -55,12 +55,7 @@ class ItemPosition {
   }
 
   @override
-  int get hashCode =>
-      number.hashCode ^
-      position.hashCode ^
-      x.hashCode ^
-      y.hashCode ^
-      size.hashCode;
+  int get hashCode => number.hashCode ^ position.hashCode ^ x.hashCode ^ y.hashCode ^ size.hashCode;
 }
 
 /// InfoItemPosition consists coordinates, order and information about
@@ -68,8 +63,9 @@ class ItemPosition {
 class InfoItemPosition extends ItemPosition {
   InfoItemPosition({
     required super.number,
-    @Deprecated('"position" is deprecated and will be removed after v2.0.0, use "x" and "y" instead')
-        double? position,
+    @Deprecated(
+        '"position" is deprecated and will be removed after v2.0.0, use "x" and "y" instead')
+    double? position,
     required this.amountAdditionalItems,
     required super.x,
     required super.y,
@@ -135,8 +131,7 @@ class StackLaying {
   const StackLaying({
     required this.itemPositionNumberAtTop,
     this.infoItemAtTop = false,
-  }) : assert(itemPositionNumberAtTop >= 0,
-            'itemPositionNumberAtTop must be positive');
+  }) : assert(itemPositionNumberAtTop >= 0, 'itemPositionNumberAtTop must be positive');
   static const StackLaying first = StackLaying(
     itemPositionNumberAtTop: 0,
     infoItemAtTop: false,

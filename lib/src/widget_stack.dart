@@ -26,8 +26,7 @@ class WidgetStack extends StatelessWidget {
   Widget build(BuildContext context) {
     positions.setAmountItems(stackedWidgets.length);
     return LayoutBuilder(builder: (context, BoxConstraints constraints) {
-      final isNotEnoughSpace =
-          constraints.maxWidth <= 0 || constraints.maxHeight <= 0;
+      final isNotEnoughSpace = constraints.maxWidth <= 0 || constraints.maxHeight <= 0;
       if (isNotEnoughSpace) {
         return const SizedBox.shrink();
       }
@@ -45,8 +44,7 @@ class WidgetStack extends StatelessWidget {
             child: SizedBox(
               height: position.size,
               width: position.size,
-              child:
-                  _buildStackedWidgetOrInfoWidget(context, position: position),
+              child: _buildStackedWidgetOrInfoWidget(context, position: position),
             ),
           );
         }).toList(),
