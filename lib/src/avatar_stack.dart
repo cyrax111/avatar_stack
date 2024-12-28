@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:flutter/material.dart';
 
 import 'widget_stack.dart';
@@ -22,7 +24,7 @@ import 'positions/restricted_positions.dart';
 /// If height or width are not set is gets them from parent.
 class AvatarStack extends StatelessWidget {
   const AvatarStack({
-    Key? key,
+    super.key,
     required this.avatars,
     this.settings,
     this.infoWidgetBuilder,
@@ -30,7 +32,7 @@ class AvatarStack extends StatelessWidget {
     this.height,
     this.borderWidth,
     this.borderColor,
-  }) : super(key: key);
+  });
 
   /// List of avatars.
   /// If you have avatars in Internet you can use [NetworkImage],
@@ -98,12 +100,12 @@ class AvatarStack extends StatelessWidget {
 /// Draws the avatar with border
 class BorderedCircleAvatar extends StatelessWidget {
   const BorderedCircleAvatar({
-    Key? key,
+    super.key,
     this.border = const BorderSide(),
     this.backgroundImage,
     this.backgroundColor,
     this.child,
-  }) : super(key: key);
+  });
 
   final BorderSide border;
   final ImageProvider<Object>? backgroundImage;

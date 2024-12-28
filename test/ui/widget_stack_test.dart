@@ -57,7 +57,7 @@ void main() {
 }
 
 class Item extends StatelessWidget {
-  const Item({Key? key}) : super(key: key);
+  const Item({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class Item extends StatelessWidget {
 }
 
 class InfoItem extends StatelessWidget {
-  const InfoItem({Key? key}) : super(key: key);
+  const InfoItem({super.key});
 
   @override
   Widget build(BuildContext context) {

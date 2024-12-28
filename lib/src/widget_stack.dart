@@ -10,8 +10,8 @@ class WidgetStack extends StatelessWidget {
     required this.positions,
     required this.stackedWidgets,
     required this.buildInfoWidget,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// List of any widgets to draw
   final List<Widget> stackedWidgets;

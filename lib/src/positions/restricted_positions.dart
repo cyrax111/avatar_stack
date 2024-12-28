@@ -117,8 +117,6 @@ class RestrictedPositions implements Positions {
         return freeSpace;
       case StackAlign.center:
         return freeSpace / 2;
-      default:
-        return 0;
     }
   }
 
@@ -217,20 +215,14 @@ class RestrictedPositions implements Positions {
 /// means only maxAmountItems items will be shown maximum.
 class RestrictedAmountPositions extends RestrictedPositions {
   RestrictedAmountPositions({
-    double maxCoverage = 0.8,
-    double minCoverage = double.negativeInfinity,
+    super.maxCoverage,
+    super.minCoverage,
     this.maxAmountItems = 5,
-    StackAlign align = StackAlign.left,
-    double infoIndent = 0.0,
-    StackLaying laying = StackLaying.last,
+    super.align,
+    super.infoIndent,
+    super.laying,
     super.layoutDirection = LayoutDirection.horizontal,
-  }) : super(
-          maxCoverage: maxCoverage,
-          minCoverage: minCoverage,
-          align: align,
-          infoIndent: infoIndent,
-          laying: laying,
-        );
+  });
 
   /// The maximum amount of items to show
   final int maxAmountItems;
