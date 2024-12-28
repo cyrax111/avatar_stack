@@ -1,3 +1,7 @@
+## 1.3.0
+
+* Pass BuildContext to InfoWidgetBuilder.
+
 ## 1.2.1
 
 * Added an example "Vertical widget stack"

@@ -67,17 +67,18 @@ class AvatarStack extends StatelessWidget {
         color: borderColor ?? Theme.of(context).colorScheme.onPrimary,
         width: borderWidth ?? 2.0);
 
-    Widget _textInfoWidgetBuilder(surplus) => BorderedCircleAvatar(
-        border: border,
-        child: FittedBox(
-            fit: BoxFit.contain,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                '+$surplus',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            )));
+    Widget _textInfoWidgetBuilder(int surplus, BuildContext context) =>
+        BorderedCircleAvatar(
+            border: border,
+            child: FittedBox(
+                fit: BoxFit.contain,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    '+$surplus',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                )));
     final _infoWidgetBuilder = infoWidgetBuilder ?? _textInfoWidgetBuilder;
 
     return SizedBox(

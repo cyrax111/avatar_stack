@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'positions/positions.dart';
 
-typedef InfoWidgetBuilder = Widget Function(int surplus);
+typedef InfoWidgetBuilder = Widget Function(int surplus, BuildContext context);
 
 /// Draws widgets stack. Can use any widgets.
 class WidgetStack extends StatelessWidget {
@@ -45,7 +45,8 @@ class WidgetStack extends StatelessWidget {
             child: SizedBox(
               height: position.size,
               width: position.size,
-              child: _buildStackedWidgetOrInfoWidget(position: position),
+              child:
+                  _buildStackedWidgetOrInfoWidget(context, position: position),
             ),
           );
         }).toList(),
@@ -53,11 +54,12 @@ class WidgetStack extends StatelessWidget {
     });
   }
 
-  Widget _buildStackedWidgetOrInfoWidget({
+  Widget _buildStackedWidgetOrInfoWidget(
+    BuildContext context, {
     required ItemPosition position,
   }) {
     if (position is InfoItemPosition) {
-      return buildInfoWidget(position.amountAdditionalItems);
+      return buildInfoWidget(position.amountAdditionalItems, context);
     } else {
       return stackedWidgets[position.number];
     }

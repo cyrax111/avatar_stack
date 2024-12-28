@@ -252,7 +252,7 @@ class Example7WidgetStack extends StatelessWidget {
                   fit: BoxFit.fitHeight,
                   child: Text('C', style: TextStyle(height: 0.9, color: Colors.green))),
             ],
-            buildInfoWidget: (surplus) {
+            buildInfoWidget: (surplus, context) {
               return Center(
                   child: Text(
                 '+$surplus',
@@ -287,7 +287,7 @@ class Example8InfoIndent extends StatelessWidget {
           height: 50,
           settings: settings,
           avatars: [for (var n = 0; n < 35; n++) NetworkImage(getAvatarUrl(n))],
-          infoWidgetBuilder: (surplus) => _infoWidget(surplus, context),
+          infoWidgetBuilder: (surplus, context) => _infoWidget(surplus, context),
         ),
       ],
     );
@@ -421,7 +421,7 @@ class Example12Vertical extends StatelessWidget {
                     fit: BoxFit.fitHeight,
                     child: Text('C', style: TextStyle(height: 0.9, color: Colors.green))),
               ],
-              buildInfoWidget: (surplus) {
+              buildInfoWidget: (surplus, context) {
                 return Center(
                     child: Text(
                   '+$surplus',
