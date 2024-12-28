@@ -1,6 +1,8 @@
-## 1.3.0
+## 2.0.0
 
 * Pass BuildContext to InfoWidgetBuilder.
+* Updated tests.
+* Updated dependencies.
 
 ## 1.2.1
 

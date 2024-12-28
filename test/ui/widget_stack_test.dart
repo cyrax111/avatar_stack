@@ -16,7 +16,7 @@ void main() {
               child: WidgetStack(
                 positions: settings,
                 stackedWidgets: List.generate(30, (index) => const Item()),
-                buildInfoWidget: (surplus) => const InfoItem(),
+                buildInfoWidget: (surplus, context) => const InfoItem(),
               ),
             ),
           ),
@@ -41,7 +41,7 @@ void main() {
             child: WidgetStack(
               positions: RestrictedPositions(),
               stackedWidgets: List.generate(30, (index) => const Item()),
-              buildInfoWidget: (surplus) => const InfoItem(),
+              buildInfoWidget: (surplus, context) => const InfoItem(),
             ),
           ),
         ),
