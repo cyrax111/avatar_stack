@@ -1,5 +1,7 @@
 ## 2.0.0
 
+* Added InfoItem to the settings position to be able to set different size of the info item. 
+* Switched x,y to Offset structure in ItemPosition.
 * Pass BuildContext to InfoWidgetBuilder.
 * Updated tests.
 * Updated dependencies.

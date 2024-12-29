@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:avatar_stack/positions.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -10,7 +12,7 @@ void main() {
   });
 
   group('ItemPosition -', () {
-    final item = ItemPosition(number: 2, x: 10.0, y: 0, size: 10.0);
+    final item = ItemPosition(number: 2, offset: Offset(10.0, 0), size: Size.square(10.0));
 
     test('toString', () {
       expect(item.toString, returnsNormally);
@@ -23,7 +25,7 @@ void main() {
 
   group('InfoItemPosition -', () {
     final item = InfoItemPosition(
-        number: 2, x: 10.0, y: 0, size: 10.0, amountAdditionalItems: 4);
+        number: 2, offset: Offset(10.0, 0), size: Size.square(10.0), amountAdditionalItems: 4);
 
     test('toString', () {
       expect(item.toString, returnsNormally);

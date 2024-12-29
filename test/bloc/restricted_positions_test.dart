@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:avatar_stack/positions.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -16,54 +18,153 @@ void main() {
 
       final calculatedPositions = defaultPositions.calculate();
       final expectedPositions = [
-        ItemPosition(number: 0, size: 20, y: 0, x: 0.0),
-        ItemPosition(number: 1, size: 20, y: 0, x: 20.0),
-        ItemPosition(number: 2, size: 20, y: 0, x: 40.0),
-        ItemPosition(number: 3, size: 20, y: 0, x: 60.0),
-        ItemPosition(number: 4, size: 20, y: 0, x: 80.0),
+        ItemPosition(number: 0, size: Size.square(20.0), offset: Offset(0.0, 0)),
+        ItemPosition(number: 1, size: Size.square(20.0), offset: Offset(20.0, 0)),
+        ItemPosition(number: 2, size: Size.square(20.0), offset: Offset(40.0, 0)),
+        ItemPosition(number: 3, size: Size.square(20.0), offset: Offset(60.0, 0)),
+        ItemPosition(number: 4, size: Size.square(20.0), offset: Offset(80.0, 0)),
       ];
 
       expect(calculatedPositions, equals(expectedPositions));
     });
-    test('hidden items exist', () {
-      final defaultPositions = RestrictedPositions(
-        align: StackAlign.left,
-        infoItem: const InfoItem(indent: 1, size: 13),
-        laying: StackLaying.last,
-        maxCoverage: 0.2,
-        minCoverage: double.negativeInfinity,
-      );
-      defaultPositions.setAmountItems(4);
-      defaultPositions.setSize(width: 30, height: 10);
 
-      final calculatedPositions = defaultPositions.calculate();
-      final expectedPositions = [
-        ItemPosition(number: 0, size: 10, y: 0, x: 0.0),
-        ItemPosition(number: 1, size: 10, y: 0, x: 8.0),
-        InfoItemPosition(
-            number: 2, size: 13, y: 0, x: 17.0, amountAdditionalItems: 2),
-      ];
+    group('hidden items exist, infoinfo item', () {
+      test('info item is larger then other items', () {
+        final defaultPositions = RestrictedPositions(
+          align: StackAlign.left,
+          infoItem: const InfoItem(indent: 0, size: 15),
+          laying: StackLaying.last,
+          maxCoverage: 0.5,
+        );
+        defaultPositions.setAmountItems(6);
+        defaultPositions.setSize(width: 30, height: 10);
 
-      expect(calculatedPositions, equals(expectedPositions));
+        final calculatedPositions = defaultPositions.calculate();
+        final expectedPositions = [
+          ItemPosition(number: 0, size: Size.square(10), offset: Offset(0.0, 0)),
+          ItemPosition(number: 1, size: Size.square(10), offset: Offset(5.0, 0)),
+          ItemPosition(number: 2, size: Size.square(10), offset: Offset(10.0, 0)),
+          InfoItemPosition(
+              number: 3, size: Size(15, 10), offset: Offset(15.0, 0), amountAdditionalItems: 3),
+        ];
+
+        expect(calculatedPositions, equals(expectedPositions));
+      });
+
+      test('info item is larger then other items and has intent', () {
+        final defaultPositions = RestrictedPositions(
+          align: StackAlign.left,
+          infoItem: const InfoItem(indent: 5, size: 15),
+          laying: StackLaying.last,
+          maxCoverage: 0.5,
+        );
+        defaultPositions.setAmountItems(6);
+        defaultPositions.setSize(width: 30, height: 10);
+
+        final calculatedPositions = defaultPositions.calculate();
+        final expectedPositions = [
+          ItemPosition(number: 0, size: Size.square(10), offset: Offset(0.0, 0)),
+          ItemPosition(number: 1, size: Size.square(10), offset: Offset(5.0, 0)),
+          InfoItemPosition(
+              number: 2, size: Size(15, 10), offset: Offset(15.0, 0), amountAdditionalItems: 4),
+        ];
+
+        expect(calculatedPositions, equals(expectedPositions));
+      });
+
+      test('info item is smaller then other items', () {
+        final defaultPositions = RestrictedPositions(
+          align: StackAlign.left,
+          infoItem: const InfoItem(indent: 0, size: 5),
+          laying: StackLaying.last,
+          maxCoverage: 0.5,
+        );
+        defaultPositions.setAmountItems(6);
+        defaultPositions.setSize(width: 30, height: 10);
+
+        final calculatedPositions = defaultPositions.calculate();
+        final expectedPositions = [
+          ItemPosition(number: 0, size: Size.square(10), offset: Offset(0.0, 0)),
+          ItemPosition(number: 1, size: Size.square(10), offset: Offset(5.0, 0)),
+          ItemPosition(number: 2, size: Size.square(10), offset: Offset(10.0, 0)),
+          ItemPosition(number: 3, size: Size.square(10), offset: Offset(15.0, 0)),
+          ItemPosition(number: 4, size: Size.square(10), offset: Offset(20.0, 0)),
+          InfoItemPosition(
+              number: 5, size: Size(5, 10), offset: Offset(25.0, 0), amountAdditionalItems: 1),
+        ];
+
+        expect(calculatedPositions, equals(expectedPositions));
+      });
+
+      test('LayoutDirection is vertical, info item is larger then other items', () {
+        final defaultPositions = RestrictedPositions(
+          align: StackAlign.left,
+          infoItem: const InfoItem(indent: 0, size: 15),
+          laying: StackLaying.last,
+          maxCoverage: 0.5,
+          layoutDirection: LayoutDirection.vertical,
+        );
+        defaultPositions.setAmountItems(6);
+        defaultPositions.setSize(width: 10, height: 30);
+
+        final calculatedPositions = defaultPositions.calculate();
+        final expectedPositions = [
+          ItemPosition(number: 0, size: Size.square(10), offset: Offset(0, 0.0)),
+          ItemPosition(number: 1, size: Size.square(10), offset: Offset(0, 5.0)),
+          ItemPosition(number: 2, size: Size.square(10), offset: Offset(0, 10.0)),
+          InfoItemPosition(
+              number: 3, size: Size(10, 15), offset: Offset(0, 15.0), amountAdditionalItems: 3),
+        ];
+
+        expect(calculatedPositions, equals(expectedPositions));
+      });
+
+      test('align is right, info item has intent', () {
+        final defaultPositions = RestrictedPositions(
+          maxCoverage: 0.5,
+          minCoverage: 0.5,
+          align: StackAlign.right,
+          infoItem: const InfoItem(indent: 50.0, size: 50),
+        );
+        defaultPositions.setAmountItems(35);
+        defaultPositions.setSize(width: 200, height: 50);
+
+        final calculatedPositions = defaultPositions.calculate();
+        final expectedPositions = [
+          ItemPosition(number: 0, size: Size.square(50), offset: Offset(0.0, 0)),
+          ItemPosition(number: 1, size: Size.square(50), offset: Offset(25.0, 0)),
+          ItemPosition(number: 2, size: Size.square(50), offset: Offset(50.0, 0)),
+          ItemPosition(number: 3, size: Size.square(50), offset: Offset(75.0, 0)),
+          InfoItemPosition(
+              number: 4, size: Size(50, 50), offset: Offset(150.0, 0), amountAdditionalItems: 31),
+        ];
+
+        expect(calculatedPositions, equals(expectedPositions));
+      });
     });
 
     test('hidden items exist - StackLaying first', () {
       final defaultPositions = RestrictedPositions(
         align: StackAlign.left,
-        infoItem: const InfoItem(indent: 1, size: 13),
+        infoItem: const InfoItem(indent: 0, size: 15),
         laying: StackLaying.first,
-        maxCoverage: 0.2,
+        maxCoverage: 0.5,
         minCoverage: double.negativeInfinity,
       );
-      defaultPositions.setAmountItems(4);
+      defaultPositions.setAmountItems(6);
       defaultPositions.setSize(width: 30, height: 10);
 
       final calculatedPositions = defaultPositions.calculate();
       final expectedPositions = [
         InfoItemPosition(
-            number: 2, size: 13, y: 0, x: 17.0, amountAdditionalItems: 2),
-        ItemPosition(number: 1, size: 10, y: 0, x: 8.0),
-        ItemPosition(number: 0, size: 10, y: 0, x: 0.0),
+          number: 3,
+          size: Size(15, 10),
+          offset: Offset(15.0, 0),
+          amountAdditionalItems: 3,
+        ),
+        ItemPosition(number: 2, size: Size.square(10), offset: Offset(10.0, 0)),
+        ItemPosition(number: 1, size: Size.square(10), offset: Offset(5.0, 0)),
+        ItemPosition(number: 0, size: Size.square(10), offset: Offset(0.0, 0)),
       ];
 
       expect(calculatedPositions, equals(expectedPositions));
@@ -72,20 +173,20 @@ void main() {
     test('min coverage', () {
       final defaultPositions = RestrictedPositions(
         align: StackAlign.left,
-        infoItem: const InfoItem(indent: 1, size: 13),
+        infoItem: const InfoItem(indent: 0, size: 15),
         laying: StackLaying.last,
-        maxCoverage: 0.2,
-        minCoverage: 0.2,
+        maxCoverage: 0.5,
+        minCoverage: 0.5,
       );
       defaultPositions.setAmountItems(4);
       defaultPositions.setSize(width: 100, height: 10);
 
       final calculatedPositions = defaultPositions.calculate();
       final expectedPositions = [
-        ItemPosition(number: 0, size: 10, y: 0, x: 0.0),
-        ItemPosition(number: 1, size: 10, y: 0, x: 8.0),
-        ItemPosition(number: 2, size: 10, y: 0, x: 16.0),
-        ItemPosition(number: 3, size: 10, y: 0, x: 24.0),
+        ItemPosition(number: 0, size: Size.square(10), offset: Offset(0.0, 0)),
+        ItemPosition(number: 1, size: Size.square(10), offset: Offset(5.0, 0)),
+        ItemPosition(number: 2, size: Size.square(10), offset: Offset(10.0, 0)),
+        ItemPosition(number: 3, size: Size.square(10), offset: Offset(15.0, 0)),
       ];
 
       expect(calculatedPositions, equals(expectedPositions));
@@ -104,11 +205,11 @@ void main() {
 
       final calculatedPositions = defaultPositions.calculate();
       final expectedPositions = [
-        ItemPosition(number: 4, size: 20, y: 0, x: 80.0),
-        ItemPosition(number: 3, size: 20, y: 0, x: 60.0),
-        ItemPosition(number: 2, size: 20, y: 0, x: 40.0),
-        ItemPosition(number: 1, size: 20, y: 0, x: 20.0),
-        ItemPosition(number: 0, size: 20, y: 0, x: 0.0),
+        ItemPosition(number: 4, size: Size.square(20), offset: Offset(80.0, 0)),
+        ItemPosition(number: 3, size: Size.square(20), offset: Offset(60.0, 0)),
+        ItemPosition(number: 2, size: Size.square(20), offset: Offset(40.0, 0)),
+        ItemPosition(number: 1, size: Size.square(20), offset: Offset(20.0, 0)),
+        ItemPosition(number: 0, size: Size.square(20), offset: Offset(0.0, 0)),
       ];
 
       expect(calculatedPositions, equals(expectedPositions));
@@ -162,11 +263,11 @@ void main() {
 
       final calculatedPositions = defaultPositions.calculate();
       final expectedPositions = [
-        ItemPosition(number: 0, size: 20, x: 0, y: 0.0),
-        ItemPosition(number: 1, size: 20, x: 0, y: 20.0),
-        ItemPosition(number: 2, size: 20, x: 0, y: 40.0),
-        ItemPosition(number: 3, size: 20, x: 0, y: 60.0),
-        ItemPosition(number: 4, size: 20, x: 0, y: 80.0),
+        ItemPosition(number: 0, size: Size.square(20), offset: Offset(0.0, 0)),
+        ItemPosition(number: 1, size: Size.square(20), offset: Offset(0, 20.0)),
+        ItemPosition(number: 2, size: Size.square(20), offset: Offset(0, 40.0)),
+        ItemPosition(number: 3, size: Size.square(20), offset: Offset(0, 60.0)),
+        ItemPosition(number: 4, size: Size.square(20), offset: Offset(0, 80.0)),
       ];
 
       expect(calculatedPositions, equals(expectedPositions));
@@ -188,10 +289,14 @@ void main() {
 
       final calculatedPositions = defaultPositions.calculate();
       final expectedPositions = [
-        ItemPosition(number: 0, size: 20, y: 0, x: 0.0),
-        ItemPosition(number: 1, size: 20, y: 0, x: 40.0),
+        ItemPosition(number: 0, size: Size.square(20), offset: Offset(0.0, 0)),
+        ItemPosition(number: 1, size: Size.square(20), offset: Offset(40.0, 0)),
         InfoItemPosition(
-            number: 2, size: 20, y: 0, x: 80.0, amountAdditionalItems: 3),
+          number: 2,
+          size: Size.square(20),
+          offset: Offset(80.0, 0),
+          amountAdditionalItems: 3,
+        ),
       ];
 
       expect(calculatedPositions, equals(expectedPositions));
@@ -211,10 +316,14 @@ void main() {
 
       final calculatedPositions = defaultPositions.calculate();
       final expectedPositions = [
-        ItemPosition(number: 0, size: 20, y: 0, x: 0.0),
-        ItemPosition(number: 1, size: 20, y: 0, x: 4.0),
+        ItemPosition(number: 0, size: Size.square(20), offset: Offset(0.0, 0)),
+        ItemPosition(number: 1, size: Size.square(20), offset: Offset(4.0, 0)),
         InfoItemPosition(
-            number: 2, size: 20, y: 0, x: 8.0, amountAdditionalItems: 3),
+          number: 2,
+          size: Size.square(20),
+          offset: Offset(8.0, 0),
+          amountAdditionalItems: 3,
+        ),
       ];
 
       expect(calculatedPositions, equals(expectedPositions));
@@ -234,10 +343,14 @@ void main() {
 
       final calculatedPositions = defaultPositions.calculate();
       final expectedPositions = [
-        ItemPosition(number: 0, size: 20, y: 0, x: 36.0),
-        ItemPosition(number: 1, size: 20, y: 0, x: 40.0),
+        ItemPosition(number: 0, size: Size.square(20), offset: Offset(36.0, 0)),
+        ItemPosition(number: 1, size: Size.square(20), offset: Offset(40.0, 0)),
         InfoItemPosition(
-            number: 2, size: 20, y: 0, x: 44.0, amountAdditionalItems: 3),
+          number: 2,
+          size: Size.square(20),
+          offset: Offset(44.0, 0),
+          amountAdditionalItems: 3,
+        ),
       ];
 
       expect(calculatedPositions, equals(expectedPositions));
@@ -257,10 +370,14 @@ void main() {
 
       final calculatedPositions = defaultPositions.calculate();
       final expectedPositions = [
-        ItemPosition(number: 0, size: 20, y: 0, x: 72.0),
-        ItemPosition(number: 1, size: 20, y: 0, x: 76.0),
+        ItemPosition(number: 0, size: Size.square(20), offset: Offset(72.0, 0)),
+        ItemPosition(number: 1, size: Size.square(20), offset: Offset(76.0, 0)),
         InfoItemPosition(
-            number: 2, size: 20, y: 0, x: 80.0, amountAdditionalItems: 3),
+          number: 2,
+          size: Size.square(20),
+          offset: Offset(80.0, 0),
+          amountAdditionalItems: 3,
+        ),
       ];
 
       expect(calculatedPositions, equals(expectedPositions));

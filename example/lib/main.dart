@@ -11,7 +11,7 @@ class AvatarStackExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Example')),
+      appBar: AppBar(title: const SelectableText('Example')),
       body: const Padding(
         padding: EdgeInsets.all(8.0),
         child: Row(
@@ -34,6 +34,8 @@ class AvatarStackExample extends StatelessWidget {
                       Example2MaxAmount(),
                       Indent(),
                       Example3MaxAmountCenterAlign(),
+                      Indent(),
+                      Example3MaxAmountRightAlignWideInfo(),
                       Indent(),
                       Example4RightAlign(),
                       Indent(),
@@ -76,7 +78,7 @@ class Example1Default extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(name),
+        SelectableText(name),
         const SizedBox(height: 10),
         AvatarStack(
           height: 50,
@@ -99,9 +101,7 @@ class Example2MaxAmount extends StatelessWidget {
     );
     return Column(
       children: [
-        const Text(
-          'Restricted amount:',
-        ),
+        const SelectableText('Restricted amount:'),
         const SizedBox(height: 10),
         AvatarStack(
           settings: settings,
@@ -126,14 +126,39 @@ class Example3MaxAmountCenterAlign extends StatelessWidget {
     );
     return Column(
       children: [
-        const Text(
-          'Restricted amount with center alignment:',
-        ),
+        const SelectableText('Restricted amount with center alignment:'),
         const SizedBox(height: 10),
         AvatarStack(
           settings: settings,
           height: 50,
           avatars: [for (var n = 0; n < 15; n++) NetworkImage(getAvatarUrl(n))],
+        ),
+      ],
+    );
+  }
+}
+
+class Example3MaxAmountRightAlignWideInfo extends StatelessWidget {
+  const Example3MaxAmountRightAlignWideInfo({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = RestrictedAmountPositions(
+      maxAmountItems: 4,
+      maxCoverage: 0.3,
+      minCoverage: 0.1,
+      align: StackAlign.right,
+      infoItem: const InfoItem(indent: 50, size: 100),
+    );
+    return Column(
+      children: [
+        const SelectableText('Restricted amount with right alignment and wide info:'),
+        const SizedBox(height: 10),
+        AvatarStack(
+          settings: settings,
+          height: 50,
+          avatars: [for (var n = 0; n < 15; n++) NetworkImage(getAvatarUrl(n))],
+          infoWidgetBuilder: _infoWidget,
         ),
       ],
     );
@@ -152,9 +177,7 @@ class Example4RightAlign extends StatelessWidget {
     );
     return Column(
       children: [
-        const Text(
-          'Right alignment:',
-        ),
+        const SelectableText('Right alignment:'),
         const SizedBox(height: 10),
         AvatarStack(
           height: 50,
@@ -178,9 +201,7 @@ class Example5MaxCoverage extends StatelessWidget {
     );
     return Column(
       children: [
-        const Text(
-          'Max coverage is set to 70%:',
-        ),
+        const SelectableText('Max coverage is set to 70%:'),
         const SizedBox(height: 10),
         AvatarStack(
           height: 50,
@@ -203,9 +224,7 @@ class Example6MinCoverage extends StatelessWidget {
     );
     return Column(
       children: [
-        const Text(
-          'Min coverage is set to minus 50%:',
-        ),
+        const SelectableText('Min coverage is set to minus 50%:'),
         const SizedBox(height: 10),
         AvatarStack(
           height: 50,
@@ -229,9 +248,7 @@ class Example7WidgetStack extends StatelessWidget {
     );
     return Column(
       children: [
-        const Text(
-          'Any widgets for stack:',
-        ),
+        const SelectableText('Any widgets for stack:'),
         const SizedBox(height: 10),
         SizedBox(
           height: 50,
@@ -275,34 +292,19 @@ class Example8InfoIndent extends StatelessWidget {
       maxCoverage: 0.3,
       minCoverage: 0.1,
       align: StackAlign.right,
-      infoItem: const InfoItem(indent: 15.0),
+      infoItem: const InfoItem(indent: 50.0, size: 100),
     );
     return Column(
       children: [
-        const Text(
-          'Indent of the info widget:',
-        ),
+        const SelectableText('Indent of the info widget:'),
         const SizedBox(height: 10),
         AvatarStack(
           height: 50,
           settings: settings,
           avatars: [for (var n = 0; n < 35; n++) NetworkImage(getAvatarUrl(n))],
-          infoWidgetBuilder: (surplus, context) => _infoWidget(surplus, context),
+          infoWidgetBuilder: _infoWidget,
         ),
       ],
-    );
-  }
-
-  Widget _infoWidget(int surplus, BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.contain,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          '+$surplus',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-      ),
     );
   }
 }
@@ -319,9 +321,7 @@ class Example9StackLayingFirst extends StatelessWidget {
     );
     return Column(
       children: [
-        const Text(
-          'The first item is at the top:',
-        ),
+        const SelectableText('The first item is at the top:'),
         const SizedBox(height: 10),
         AvatarStack(
           height: 50,
@@ -342,26 +342,15 @@ class Example10StackLayingFive extends StatelessWidget {
       maxCoverage: 0.3,
       minCoverage: 0.1,
       laying: const StackLaying(itemPositionNumberAtTop: 5),
-      infoItem: InfoItem(
-        indent: 100,
-        size: 100,
-      ),
     );
     return Column(
       children: [
-        const Text('The fifth item is at the top:'),
+        const SelectableText('The fifth item is at the top:'),
         const SizedBox(height: 10),
         AvatarStack(
           height: 50,
           settings: settings,
           avatars: [for (var n = 0; n < 20; n++) NetworkImage(getAvatarUrl(n))],
-          infoWidgetBuilder: (surplus) {
-            return Container(
-              color: Colors.red,
-              width: 100,
-              child: Center(child: Text(surplus.toString())),
-            );
-          },
         ),
       ],
     );
@@ -383,7 +372,7 @@ class Example11Vertical extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Row(
         children: [
-          const RotatedBox(quarterTurns: 3, child: Text('Vertical avatar stack')),
+          const RotatedBox(quarterTurns: 3, child: SelectableText('Vertical avatar stack')),
           const SizedBox(width: 10),
           AvatarStack(
             width: 50,
@@ -411,7 +400,7 @@ class Example12Vertical extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Row(
         children: [
-          const RotatedBox(quarterTurns: 3, child: Text('Vertical widget stack')),
+          const RotatedBox(quarterTurns: 3, child: SelectableText('Vertical widget stack')),
           const SizedBox(width: 10),
           SizedBox(
             width: 50,
@@ -445,6 +434,22 @@ class Example12Vertical extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _infoWidget(int surplus, BuildContext context) {
+  return Container(
+    color: Colors.lightBlueAccent.withAlpha(50),
+    child: FittedBox(
+      fit: BoxFit.contain,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          '+$surplus',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+      ),
+    ),
+  );
 }
 
 String getAvatarUrl(int n) {

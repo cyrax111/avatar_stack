@@ -6,13 +6,15 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('WidgetStack -', () {
     testWidgets('golden - usual behavior', (WidgetTester tester) async {
-      final settings = RestrictedPositions(maxCoverage: 0.6);
+      final settings = RestrictedPositions(maxCoverage: 0.6, minCoverage: 0.6);
       await tester.pumpWidget(
         MaterialApp(
           home: Center(
-            child: SizedBox(
+            child: Container(
+              key: const Key('WidgetStack'),
               height: 50,
               width: 200,
+              color: Colors.blueGrey,
               child: WidgetStack(
                 positions: settings,
                 stackedWidgets: List.generate(30, (index) => const Item()),
@@ -23,10 +25,10 @@ void main() {
         ),
       );
 
-      final widgetStack = find.byType(WidgetStack);
+      final widgetStack = find.byKey(const Key('WidgetStack'));
       expect(widgetStack, findsOneWidget);
 
-      expect(find.byType(Item), findsNWidgets(9));
+      expect(find.byType(Item), findsNWidgets(7));
       expect(find.byType(InfoItem), findsOneWidget);
 
       await expectLater(widgetStack, matchesGoldenFile('widget_stack.png'));

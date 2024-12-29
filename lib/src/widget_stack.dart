@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'positions/positions.dart';
 
+/// Callback builder for special info item to show how many avatars are hidden
+///
+/// The parameter [surplus] returns an amount of currently hidden avatars.
 typedef InfoWidgetBuilder = Widget Function(int surplus, BuildContext context);
 
 /// Draws widgets stack. Can use any widgets.
@@ -39,11 +42,11 @@ class WidgetStack extends StatelessWidget {
       return Stack(
         children: positions.calculate().map((position) {
           return Positioned(
-            left: position.x,
-            top: position.y,
+            left: position.offset.dx,
+            top: position.offset.dy,
             child: SizedBox(
-              height: position.size,
-              width: position.size,
+              height: position.size.height,
+              width: position.size.width,
               child: _buildStackedWidgetOrInfoWidget(context, position: position),
             ),
           );

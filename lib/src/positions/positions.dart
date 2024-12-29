@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import '../constants/max_int.dart'
     if (dart.library.io) '../constants/max_int_64.dart'
     if (dart.library.html) '../constants/max_int_32.dart';
@@ -18,21 +20,19 @@ abstract class Positions {
 class ItemPosition {
   ItemPosition({
     required this.number,
-    required this.x,
-    required this.y,
+    required this.offset,
     required this.size,
   });
 
   /// Ordinal number
   final int number;
 
-  final double x;
-  final double y;
-  final double size;
+  final Offset offset;
+  final Size size;
 
   @override
   String toString() {
-    return 'ItemPosition(number: $number, x: $x, y: $y, size: $size)';
+    return 'ItemPosition(number: $number, offset: $offset, size: $size)';
   }
 
   @override
@@ -41,13 +41,12 @@ class ItemPosition {
 
     return other is ItemPosition &&
         other.number == number &&
-        other.x == x &&
-        other.y == y &&
+        other.offset == offset &&
         other.size == size;
   }
 
   @override
-  int get hashCode => number.hashCode ^ x.hashCode ^ y.hashCode ^ size.hashCode;
+  int get hashCode => number.hashCode ^ offset.hashCode ^ size.hashCode;
 }
 
 /// InfoItemPosition consists coordinates, order and information about
@@ -55,12 +54,8 @@ class ItemPosition {
 class InfoItemPosition extends ItemPosition {
   InfoItemPosition({
     required super.number,
-    @Deprecated(
-        '"position" is deprecated and will be removed after v2.0.0, use "x" and "y" instead')
-    double? position,
     required this.amountAdditionalItems,
-    required super.x,
-    required super.y,
+    required super.offset,
     required super.size,
   }) : assert(amountAdditionalItems != 0);
 
@@ -70,8 +65,7 @@ class InfoItemPosition extends ItemPosition {
     required super.size,
   }) : super(
           number: itemPosition.number,
-          x: itemPosition.x,
-          y: itemPosition.y,
+          offset: itemPosition.offset,
         );
 
   /// Shows amount of additional (hidden) items.
@@ -79,7 +73,7 @@ class InfoItemPosition extends ItemPosition {
 
   @override
   String toString() {
-    return 'InfoItemPosition(number: $number, additionalItems: $amountAdditionalItems, x: $x, y: $y, size: $size)';
+    return 'InfoItemPosition(number: $number, additionalItems: $amountAdditionalItems, offset: $offset, size: $size)';
   }
 
   @override
@@ -89,14 +83,13 @@ class InfoItemPosition extends ItemPosition {
     return other is InfoItemPosition &&
         other.amountAdditionalItems == amountAdditionalItems &&
         other.number == number &&
-        other.x == x &&
-        other.y == y &&
+        other.offset == offset &&
         other.size == size;
   }
 
   @override
   int get hashCode =>
-      number.hashCode ^ amountAdditionalItems.hashCode ^ x.hashCode ^ y.hashCode ^ size.hashCode;
+      number.hashCode ^ amountAdditionalItems.hashCode ^ offset.hashCode ^ size.hashCode;
 }
 
 /// Whether and how to align avatars horizontally.
