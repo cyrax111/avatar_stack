@@ -1,3 +1,11 @@
+## 3.0.0
+
+* Added animation.
+* Updated an example.
+* Extended README.
+* Added copyWith for RestrictedPositions.
+* Added rect getter to ItemPosition.
+
 ## 2.0.0
 
 * Added InfoItem to the settings position to be able to set different size of the info item. 

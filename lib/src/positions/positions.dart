@@ -30,6 +30,8 @@ class ItemPosition {
   final Offset offset;
   final Size size;
 
+  Rect get rect => offset & size;
+
   @override
   String toString() {
     return 'ItemPosition(number: $number, offset: $offset, size: $size)';

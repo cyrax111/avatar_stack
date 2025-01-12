@@ -14,7 +14,8 @@ class RestrictedPositions implements Positions {
     this.infoItem = const InfoItem.absent(),
     this.laying = StackLaying.last,
     this.layoutDirection = LayoutDirection.horizontal,
-  });
+  }) : assert(maxCoverage >= minCoverage,
+            'minCoverage ($minCoverage) should not be more then maxCoverage ($maxCoverage)');
 
   /// Define minimum items coverage.
   /// If [minCoverage] is negative the gape between item exists.

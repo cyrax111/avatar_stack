@@ -3,7 +3,7 @@ description: Advanced and agile avatar stack with settings. It allows to place a
 maintainer: Alexander Bosak (bskaxe@gmail.com)
 issue_tracker: https://github.com/cyrax111/avatar_stack/issues
 repository: https://github.com/cyrax111/avatar_stack
-version: 2.0.0
+version: 3.0.0
 
 environment:
   sdk: ^3.4.3

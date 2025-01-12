@@ -2,10 +2,9 @@
 
 import 'package:flutter/material.dart';
 
-import 'widget_stack.dart';
-
 import 'positions/positions.dart';
 import 'positions/restricted_positions.dart';
+import 'widget_stack.dart';
 
 /// Draws avatar stack which is presented by [ImageProvider].
 ///
@@ -104,6 +103,7 @@ class BorderedCircleAvatar extends StatelessWidget {
     this.border = const BorderSide(),
     this.backgroundImage,
     this.backgroundColor,
+    this.constraints = const BoxConstraints(),
     this.child,
   });
 
@@ -111,19 +111,23 @@ class BorderedCircleAvatar extends StatelessWidget {
   final ImageProvider<Object>? backgroundImage;
   final Color? backgroundColor;
   final Widget? child;
+  final BoxConstraints constraints;
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      backgroundColor: border.color,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints.expand(),
-        child: Padding(
-          padding: EdgeInsets.all(border.width),
-          child: CircleAvatar(
-            backgroundImage: backgroundImage,
-            backgroundColor: backgroundColor,
-            child: child,
+    return ConstrainedBox(
+      constraints: constraints,
+      child: CircleAvatar(
+        backgroundColor: border.color,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints.expand(),
+          child: Padding(
+            padding: EdgeInsets.all(border.width),
+            child: CircleAvatar(
+              backgroundImage: backgroundImage,
+              backgroundColor: backgroundColor,
+              child: child,
+            ),
           ),
         ),
       ),
