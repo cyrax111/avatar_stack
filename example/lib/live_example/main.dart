@@ -8,7 +8,11 @@ import 'animated_widget_stack_example.dart';
 import 'get_avatar.dart';
 
 class AvatarStackExample extends StatefulWidget {
-  const AvatarStackExample({Key? key}) : super(key: key);
+  const AvatarStackExample({Key? key, required AvatarProvider avatarProvider})
+      : _avatarProvider = avatarProvider,
+        super(key: key);
+
+  final AvatarProvider _avatarProvider;
 
   @override
   State<AvatarStackExample> createState() => _AvatarStackExampleState();
@@ -70,27 +74,30 @@ class _AvatarStackExampleState extends State<AvatarStackExample> {
     return Scaffold(
       appBar: _AppBar(),
       bottomSheet: _bottomSheet(),
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: 8.8, right: 8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 32, right: 8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: horizontal,
+      body: PrecacheLoading(
+        avatarProvider: widget._avatarProvider,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 8.8, right: 8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 32, right: 8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: horizontal,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 60.0),
-              child: Row(children: vertical),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(top: 60.0),
+                child: Row(children: vertical),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -111,15 +118,17 @@ class _AvatarStackExampleState extends State<AvatarStackExample> {
             runSpacing: space,
             children: [
               ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _index++;
-                    _stackedImages = _stackedImages.toList() //
-                      ..insert(0, _generateImage(_index));
-                    _stackedWidgets = _stackedWidgets.toList() //
-                      ..insert(0, _generateWidget(_index));
-                  });
-                },
+                onPressed: _index >= AvatarProvider.avatarsAmount - 1
+                    ? null
+                    : () {
+                        setState(() {
+                          _index++;
+                          _stackedImages = _stackedImages.toList() //
+                            ..insert(0, _generateImage(_index));
+                          _stackedWidgets = _stackedWidgets.toList() //
+                            ..insert(0, _generateWidget(_index));
+                        });
+                      },
                 child: const Text('Add'),
               ),
               ElevatedButton(
@@ -230,7 +239,7 @@ class _AvatarStackExampleState extends State<AvatarStackExample> {
         List.generate(_index, (index) => index).map((index) => _generateWidget(index)).toList();
   }
 
-  ImageProvider _generateImage(int index) => getAvatar(index);
+  ImageProvider _generateImage(int index) => widget._avatarProvider.getAvatar(index, context);
   Widget _generateWidget(int index) => FlutterLogo(
         key: ValueKey(index),
         size: double.infinity,
@@ -282,6 +291,6 @@ void main() {
       useMaterial3: true,
       brightness: Brightness.dark,
     ),
-    home: const AvatarStackExample(),
+    home: AvatarStackExample(avatarProvider: AvatarProvider()),
   ));
 }
