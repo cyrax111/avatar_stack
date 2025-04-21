@@ -8,7 +8,7 @@ Avatar stack is used to visually represent users, places, and things in a limite
 
 ![Example](https://github.com/cyrax111/blob/raw/master/avatar_stack/animation_feature.webp)
 
-Try [Live Demo](http://cyrax.space/package/avatar_stack/) :-)
+Try [Live Demo](https://cyrax.space/package/avatar_stack/) :-)
 
 ## Example
 ```dart
