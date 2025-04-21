@@ -15,7 +15,10 @@ class KeyWidgetList {
       
 Every widget of stackedWidgets of AnimatedWidgetStack should have an unique key.
       ''');
-      assert(!keyWidgets.keys.contains(key), 'the key($key) already exists');
+      assert(!keyWidgets.keys.contains(key), '''The key($key) already exists.
+      
+Every widget of stackedWidgets of AnimatedWidgetStack should have an unique key.     
+      ''');
       final positiveKey = key ?? UniqueKey();
       keyWidgets[positiveKey] = IndexWidget(i, widget);
     }
